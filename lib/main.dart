@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'functions.dart';
+import 'package:email_auth/email_auth.dart';
+import 'reference.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,6 +56,64 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   final myController = TextEditingController();
+  final myController2 = TextEditingController();
+
+//EMAIL VERIFICATION METHODS
+  var emailAuth = EmailAuth(sessionName: "testsesstion");
+
+  void sendOTP() async {
+    bool result =
+        await emailAuth.sendOtp(recipientMail: myController.text, otpLength: 5);
+    if (result) {
+      log("OTP VERIFIED");
+      _showMyDialog();
+    } else {
+      log('problem');
+    }
+  }
+
+  void verifyOTP() async {
+    var res = emailAuth.validateOtp(
+        recipientMail: myController.text, userOtp: myController2.text);
+    if (res) {
+      log("OTP VERFIED");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SecondRoute()),
+      );
+      myController.clear();
+      myController2.clear();
+    } else {
+      log("OTP INVALID");
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('EMAIL SENT'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('VERIFICATION EMAIL SENT'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('CLOSE'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,20 +136,20 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //NAME FIELD
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Enter Your Name',
-              ),
-            ),
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //     border: UnderlineInputBorder(),
+            //     labelText: 'Enter Your Name',
+            //   ),
+            // ),
 
-            //BIRTHDAY FIELD
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Enter Your BirthDay',
-              ),
-            ),
+            // //BIRTHDAY FIELD
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //     border: UnderlineInputBorder(),
+            //     labelText: 'Enter Your BirthDay',
+            //   ),
+            // ),
 
             //EMAIL FIELD
 
@@ -101,14 +161,31 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
 
+            TextFormField(
+              controller: myController2,
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'ENTER OTP',
+              ),
+            ),
+
             //SEND BUTTON
             ElevatedButton(
               onPressed: () {
                 // Respond to button press
-                sendEmail(myController.text);
+                sendOTP();
                 log(myController.text);
               },
               child: Text('SEND!'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                // Respond to button press
+                verifyOTP();
+                log(myController.text);
+              },
+              child: Text('VERIFY OTP'),
             )
           ],
         ),
@@ -130,24 +207,4 @@ class _MyHomePageState extends State<MyHomePage> {
 //   await FlutterEmailSender.send(email);
 // }
 
-Future<void> sendEmail(emailName) async {
-  String username = 'fkane01@manhattan.edu';
-  String password = 'Kaneeats100%Kandy';
-  final smtpServer = gmailSaslXoauth2(username, password);
-  final message = Message()
-    ..from = Address(username)
-    ..recipients.add(emailName)
-    ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
-    ..text = 'This is the plain text.\nThis is line 2 of the text part.'
-    ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
 
-  try {
-    final sendReport = await send(message, smtpServer);
-    log('Message sent: ' + sendReport.toString());
-  } on MailerException catch (e) {
-    log('Message not sent.');
-    for (var p in e.problems) {
-      log('Problem: ${p.code}: ${p.msg}');
-    }
-  }
-}
