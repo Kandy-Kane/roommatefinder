@@ -134,28 +134,11 @@ class _MyHomePageState extends State<SignIn> {
               controller: myController2,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'ENTER OTP',
+                labelText: 'Enter Password',
               ),
             ),
 
             //SEND BUTTON
-            ElevatedButton(
-              onPressed: () {
-                // Respond to button press
-                sendOTP();
-                log(myController.text);
-              },
-              child: Text('SEND!'),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                // Respond to button press
-                verifyOTP();
-                log(myController.text);
-              },
-              child: Text('VERIFY OTP'),
-            ),
             ElevatedButton(
               onPressed: () {
                 // Respond to button press
@@ -164,7 +147,7 @@ class _MyHomePageState extends State<SignIn> {
                   MaterialPageRoute(builder: (context) => const TabBarDemo()),
                 );
               },
-              child: Text('DEVELOPING'),
+              child: Text('Sign In'),
             )
           ],
         ),

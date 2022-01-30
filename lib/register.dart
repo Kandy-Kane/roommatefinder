@@ -3,6 +3,10 @@ import 'dart:developer';
 import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'reference.dart';
+import 'mongodbAttempt/userClass.dart';
+import 'mongodbAttempt/database.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'user_Firebase.dart';
 
 // class Register extends StatelessWidget {
 //   const Register({Key? key}) : super(key: key);
@@ -49,18 +53,21 @@ class _MyHomePageState extends State<Register> {
   int _counter = 0;
   final myController = TextEditingController();
   final myController2 = TextEditingController();
+  final myController3 = TextEditingController();
+  final myController4 = TextEditingController();
+  final myController5 = TextEditingController();
 
 //EMAIL VERIFICATION METHODS
-  var emailAuth = EmailAuth(sessionName: "testsession");
+  var emailAuth = EmailAuth(sessionName: "SkittleSession");
 
   void sendOTP() async {
-    bool result =
-        await emailAuth.sendOtp(recipientMail: myController.text, otpLength: 5);
+    bool result = await emailAuth.sendOtp(
+        recipientMail: myController3.text, otpLength: 5);
     if (result) {
-      log("OTP VERIFIED");
+      log("OTP SENT!");
       _showMyDialog();
     } else {
-      log('problem');
+      log('problem did not send');
     }
   }
 
@@ -107,6 +114,17 @@ class _MyHomePageState extends State<Register> {
     );
   }
 
+  // void registerUser() async {
+  //   final user = User(
+  //       id: M.ObjectId(),
+  //       name: myController.text,
+  //       username: myController2.text,
+  //       email: myController3.text,
+  //       password: myController4.text);
+  //   // await MongoDatabase.insert(user);
+  //   // Navigator.pop(context);
+  // }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -123,13 +141,15 @@ class _MyHomePageState extends State<Register> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: myController,
               //controller: myController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'Name',
+                labelText: 'Full Name',
               ),
             ),
             TextFormField(
+              controller: myController2,
               //controller: myController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
@@ -137,7 +157,7 @@ class _MyHomePageState extends State<Register> {
               ),
             ),
             TextFormField(
-              controller: myController,
+              controller: myController3,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'Enter Your Email',
@@ -145,7 +165,15 @@ class _MyHomePageState extends State<Register> {
             ),
 
             TextFormField(
-              controller: myController2,
+              controller: myController4,
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Create A Password',
+              ),
+            ),
+
+            TextFormField(
+              controller: myController5,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'ENTER OTP',
@@ -157,7 +185,7 @@ class _MyHomePageState extends State<Register> {
               onPressed: () {
                 // Respond to button press
                 sendOTP();
-                log(myController.text);
+                log(myController3.text);
               },
               child: Text('SEND!'),
             ),
@@ -170,8 +198,12 @@ class _MyHomePageState extends State<Register> {
               },
               child: Text('VERIFY OTP'),
             ),
+
             ElevatedButton(
               onPressed: () {
+                var db = Database();
+                db.addUser(myController.text, myController2.text,
+                    myController3.text, myController4.text);
                 // Respond to button press
                 Navigator.pushReplacement(
                   context,
