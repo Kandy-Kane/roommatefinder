@@ -2,30 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/tabs.dart';
+import 'package:roommatefinder/user_Firebase.dart';
 import 'reference.dart';
-
-// class SignIn extends StatelessWidget {
-//   const SignIn({Key? key}) : super(key: key);
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//           // This is the theme of your application.
-//           //
-//           // Try running your application with "flutter run". You'll see the
-//           // application has a blue toolbar. Then, without quitting the app, try
-//           // changing the primarySwatch below to Colors.green and then invoke
-//           // "hot reload" (press "r" in the console where you ran "flutter run",
-//           // or simply save your changes to "hot reload" in a Flutter IDE).
-//           // Notice that the counter didn't reset back to zero; the application
-//           // is not restarted.
-//           primarySwatch: Colors.red),
-//       home: const SignIn(),
-//     );
-//   }
-// }
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -49,63 +27,34 @@ class _MyHomePageState extends State<SignIn> {
   int _counter = 0;
   final myController = TextEditingController();
   final myController2 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-//EMAIL VERIFICATION METHODS
-  var emailAuth = EmailAuth(sessionName: "testsession");
-
-  void sendOTP() async {
-    bool result =
-        await emailAuth.sendOtp(recipientMail: myController.text, otpLength: 5);
-    if (result) {
-      log("OTP VERIFIED");
-      _showMyDialog();
-    } else {
-      log('problem');
-    }
-  }
-
-  void verifyOTP() async {
-    var res = emailAuth.validateOtp(
-        recipientMail: myController.text, userOtp: myController2.text);
-    if (res) {
-      log("OTP VERFIED");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const TabBarDemo()),
-      );
-      myController.clear();
-      myController2.clear();
-    } else {
-      log("OTP INVALID");
-    }
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('EMAIL SENT'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('VERIFICATION EMAIL SENT'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('CLOSE'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Future<void> _showMyDialog() async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false, // user must tap button!
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('EMAIL SENT'),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: const <Widget>[
+  //               Text('VERIFICATION EMAIL SENT'),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('CLOSE'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,42 +64,64 @@ class _MyHomePageState extends State<SignIn> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: myController,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Enter Your Email',
-              ),
+    return Form(
+      key: _formKey,
+      // Center is a layout widget. It takes a single child and positions it
+      // in the middle of the parent.
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextFormField(
+            controller: myController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              } //else if (!value.contains("manhattan.edu")) {
+              //   return 'Please use your Manhattan College Email';
+              // }
+              return null;
+            },
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Enter Your Email',
             ),
+          ),
 
-            TextFormField(
-              controller: myController2,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Enter Password',
-              ),
+          TextFormField(
+            controller: myController2,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Enter Password',
             ),
+          ),
 
-            //SEND BUTTON
-            ElevatedButton(
-              onPressed: () {
-                // Respond to button press
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TabBarDemo()),
-                );
-              },
-              child: Text('Sign In'),
-            )
-          ],
-        ),
+          //SEND BUTTON
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                var db = Database();
+                var user =
+                    await db.findUser(myController.text, myController2.text);
+                if (user == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TabBarDemo()),
+                  );
+                } else {
+                  print("SOMETHING WRONG HAPPENDED");
+                }
+              }
+              // Respond to button press
+            },
+            child: Text('Sign In'),
+          )
+        ],
       ),
     );
   }
