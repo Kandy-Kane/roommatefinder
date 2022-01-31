@@ -1,13 +1,13 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
-class User {
+class MongoUser {
   final ObjectId id;
   final String name;
   final String username;
   final String email;
   final String password;
 
-  const User(
+  const MongoUser(
       {required this.id,
       required this.name,
       required this.username,
@@ -24,7 +24,7 @@ class User {
     };
   }
 
-  User.fromMap(Map<String, dynamic> map)
+  MongoUser.fromMap(Map<String, dynamic> map)
       : name = map['name'],
         id = map['_id'],
         username = map['username'],

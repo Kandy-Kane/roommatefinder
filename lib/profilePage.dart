@@ -8,6 +8,7 @@ import 'functions.dart';
 import 'package:email_auth/email_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'userClass.dart';
 
 // void main() {
 //   runApp(const MaterialApp(
@@ -17,23 +18,47 @@ import 'package:flutter/material.dart';
 // }
 
 class profilePage extends StatelessWidget {
-  const profilePage({Key? key}) : super(key: key);
+  const profilePage({Key? key, required this.user}) : super(key: key);
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Logout'),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const MainPage()),
-            );
-          },
-        ),
+        body: Column(children: [
+      Flexible(
+          child: FractionallySizedBox(
+              widthFactor: 1,
+              heightFactor: 0.6,
+              child: Container(
+                color: Colors.green,
+              ))),
+      Container(
+        alignment: Alignment.centerLeft,
+        child: Text(user.username,
+            textAlign: TextAlign.left, textScaleFactor: 4.0),
       ),
-    );
+      Container(
+        alignment: Alignment.centerLeft,
+        child: Text(user.name, textAlign: TextAlign.left, textScaleFactor: 2.0),
+      ),
+      Container(
+        alignment: Alignment.centerLeft,
+        child:
+            Text(user.email, textAlign: TextAlign.left, textScaleFactor: 2.0),
+      ),
+      Container(
+        alignment: Alignment.centerLeft,
+        child: ElevatedButton(
+            child: const Text('Logout'),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MainPage()),
+              );
+            }),
+      ),
+    ]));
   }
 }
 

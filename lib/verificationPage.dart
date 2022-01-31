@@ -4,10 +4,11 @@ import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/emailAuthClass.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'reference.dart';
-import 'mongodbAttempt/userClass.dart';
+import 'mongodbAttempt/mongouserClass.dart';
 import 'mongodbAttempt/database.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'user_Firebase.dart';
+import 'userClass.dart';
 
 class otpVerification extends StatefulWidget {
   const otpVerification(
@@ -77,10 +78,18 @@ class _otpVerificationState extends State<otpVerification> {
                   var db = Database();
                   db.addUser(widget.name, widget.username, widget.email,
                       widget.password);
+                  var myUser = User(
+                      name: widget.name,
+                      username: widget.username,
+                      email: widget.email);
                   // Respond to button press
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const TabBarDemo()),
+                    MaterialPageRoute(
+                        builder: (context) => TabBarDemo(
+                              email: widget.email,
+                              tabUser: myUser,
+                            )),
                   );
                 } else {
                   log("PROBLEM VERIFYING OTP IN VERIFICATiON PAGE");

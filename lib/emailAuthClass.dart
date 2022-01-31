@@ -4,7 +4,7 @@ import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'package:roommatefinder/verificationPage.dart';
 import 'reference.dart';
-import 'mongodbAttempt/userClass.dart';
+import 'mongodbAttempt/mongouserClass.dart';
 import 'mongodbAttempt/database.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'user_Firebase.dart';

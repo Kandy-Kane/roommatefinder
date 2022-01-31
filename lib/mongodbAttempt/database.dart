@@ -1,5 +1,5 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import 'userClass.dart';
+import 'mongouserClass.dart';
 import 'constants.dart';
 
 //mongodb+srv://kandykane:7Rs0WO5uBv1P71SF@roommatefinder.aido8.mongodb.net/USERS?retryWrites=true&w=majority
@@ -24,11 +24,11 @@ class MongoDatabase {
     }
   }
 
-  static insert(User user) async {
+  static insert(MongoUser user) async {
     await userCollection.insertAll([user.toMap()]);
   }
 
-  static update(User user) async {
+  static update(MongoUser user) async {
     var u = await userCollection.findOne({"_id": user.id});
     u!["name"] = user.name;
     u["username"] = user.username;
@@ -36,7 +36,7 @@ class MongoDatabase {
     await userCollection.save(u);
   }
 
-  static delete(User user) async {
+  static delete(MongoUser user) async {
     await userCollection.remove(where.id(user.id));
   }
 }

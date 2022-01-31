@@ -5,7 +5,7 @@ import 'package:roommatefinder/emailAuthClass.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'package:roommatefinder/verificationPage.dart';
 import 'reference.dart';
-import 'mongodbAttempt/userClass.dart';
+import 'mongodbAttempt/mongouserClass.dart';
 import 'mongodbAttempt/database.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'user_Firebase.dart';
@@ -208,19 +208,19 @@ class _MyHomePageState extends State<Register> {
           //   child: Text('VERIFY OTP'),
           // ),
 
-          ElevatedButton(
-            onPressed: () {
-              var db = Database();
-              db.addUser(myController.text, myController2.text,
-                  myController3.text, myController4.text);
-              // Respond to button press
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const TabBarDemo()),
-              );
-            },
-            child: Text('DEVELOPING'),
-          )
+          // ElevatedButton(
+          //   onPressed: () {
+          //     var db = Database();
+          //     db.addUser(myController.text, myController2.text,
+          //         myController3.text, myController4.text);
+          //     // Respond to button press
+          //     Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => const TabBarDemo()),
+          //     );
+          //   },
+          //   child: Text('DEVELOPING'),
+          // )
         ],
       ),
     );

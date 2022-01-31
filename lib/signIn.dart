@@ -109,9 +109,14 @@ class _MyHomePageState extends State<SignIn> {
                 var user =
                     await db.findUser(myController.text, myController2.text);
                 if (user == true) {
+                  var userTemp = await db.queryUser(myController.text);
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const TabBarDemo()),
+                    MaterialPageRoute(
+                        builder: (context) => TabBarDemo(
+                              email: myController.text,
+                              tabUser: userTemp,
+                            )),
                   );
                 } else {
                   print("SOMETHING WRONG HAPPENDED");
