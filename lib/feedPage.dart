@@ -25,7 +25,12 @@ class _feedPageState extends State<feedPage> {
   var collection = FirebaseFirestore.instance.collection('USERS');
   Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
       .collection('USERS')
-      //.orderBy('name')
+      .orderBy('name')
+      .snapshots();
+
+  Stream<QuerySnapshot> snaps2 = FirebaseFirestore.instance
+      .collection('USERS')
+      .orderBy('name')
       .snapshots();
 
   @override
@@ -54,12 +59,16 @@ class _feedPageState extends State<feedPage> {
                     .where('name', isGreaterThanOrEqualTo: value)
                     .where('name', isLessThan: value + 'z')
                     .snapshots();
+                // snaps2 = collection
+                //     .where('email', isGreaterThanOrEqualTo: value)
+                //     .where('email', isLessThan: value + 'z')
+                //     .snapshots();
               }
             });
           },
           decoration: const InputDecoration(
             border: UnderlineInputBorder(),
-            labelText: 'Search',
+            labelText: 'Search Using Name',
           ),
         )),
         Flexible(
