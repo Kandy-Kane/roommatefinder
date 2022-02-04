@@ -21,51 +21,85 @@ class feedPage extends StatefulWidget {
 }
 
 class _feedPageState extends State<feedPage> {
-  final CollectionReference collection =
-      FirebaseFirestore.instance.collection('USERS');
+  final myController = TextEditingController();
+  var collection = FirebaseFirestore.instance.collection('USERS');
+  Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
+      .collection('USERS')
+      //.orderBy('name')
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
     var db = Database();
-    //collection.orderBy('name');
-    // final CollectionReference users =
-    //     FirebaseFirestore.instance.collection('USERS');
-    //users.orderBy('name');
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Notes"),
-      //   centerTitle: true,
-      // ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: collection.snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView(
-              children: (snapshot.data! as QuerySnapshot).docs.map((doc) {
-                return Card(
-                  child: ListTile(
-                    leading: FlutterLogo(size: 56.0),
-                    title: Text(doc['name']),
-                    subtitle: Text(doc['email']),
-                    //trailing: Icon(Icons.more_vert),
-                    onTap: () async {
-                      var db = Database();
-                      var selectedUser = await db.queryUser(doc['email']);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              profilePage(user: selectedUser)));
-                    },
-                  ),
+
+        // appBar: AppBar(
+        //   title: Text("Notes"),
+        //   centerTitle: true,
+        // ),
+        body: Column(
+      children: [
+        SizedBox(
+            child: TextFormField(
+          controller: myController,
+          onChanged: (value) async {
+            setState(() {
+              if (value == "") {
+                snaps = FirebaseFirestore.instance
+                    .collection('USERS')
+                    .orderBy('name')
+                    .snapshots();
+              } else {
+                snaps = collection
+                    .where('name', isGreaterThanOrEqualTo: value)
+                    .where('name', isLessThan: value + 'z')
+                    .snapshots();
+              }
+            });
+          },
+          decoration: const InputDecoration(
+            border: UnderlineInputBorder(),
+            labelText: 'Search',
+          ),
+        )),
+        Flexible(
+            child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: snaps,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              }).toList(),
-            );
-          }
-        },
-      ),
-    );
+              } else {
+                return ListView(
+                  children: (snapshot.data!).docs.map((doc) {
+                    return Card(
+                      child: ListTile(
+                        leading: FlutterLogo(size: 56.0),
+                        title: Text(doc['name']),
+                        subtitle: Text(doc['email']),
+                        //trailing: Icon(Icons.more_vert),
+                        onTap: () async {
+                          var db = Database();
+                          var selectedUser = await db.queryUser(doc['email']);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  profilePage(user: selectedUser)));
+                        },
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+            },
+          ),
+        )
+            //)
+            ),
+      ],
+    ));
   }
 }
