@@ -47,9 +47,9 @@ class _messageDetailPageState extends State<messageDetailPage> {
 
   Color getDynamicColor(String username) {
     if (username == widget.user.username) {
-      return Colors.lightGreen;
+      return Color.fromARGB(255, 194, 255, 124);
     } else {
-      return Colors.red;
+      return Color.fromARGB(255, 68, 218, 245);
     }
   }
 
@@ -135,7 +135,6 @@ class _messageDetailPageState extends State<messageDetailPage> {
                 ),
             SizedBox(
               child: TextFormField(
-                style: TextStyle(fontSize: 20),
                 controller: myController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -146,29 +145,24 @@ class _messageDetailPageState extends State<messageDetailPage> {
                   return null;
                 },
                 decoration: const InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 25.0, horizontal: 10.0),
-                  border: OutlineInputBorder(),
+                  border: UnderlineInputBorder(),
                   labelText: '...',
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () async {
-                if (myController.text == '') {
-                } else {
-                  messageReference.add({
-                    'messageBody': myController.text,
-                    'dateTime': DateTime.now(),
-                    'sentBy': widget.user.username
-                  });
-                  messageReference2.add({
-                    'messageBody': myController.text,
-                    'dateTime': DateTime.now(),
-                    'sentBy': widget.user.username
-                  });
-                  myController.clear();
-                }
+                messageReference.add({
+                  'messageBody': myController.text,
+                  'dateTime': DateTime.now(),
+                  'sentBy': widget.user.username
+                });
+                messageReference2.add({
+                  'messageBody': myController.text,
+                  'dateTime': DateTime.now(),
+                  'sentBy': widget.user.username
+                });
+                myController.clear();
               },
               child: Text('SEND'),
             )
