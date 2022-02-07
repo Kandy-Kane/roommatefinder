@@ -70,17 +70,17 @@ class selectedProfilePage extends StatelessWidget {
               );
             }),
       ),
-      Container(
-        alignment: Alignment.centerLeft,
-        child: ElevatedButton(
-            child: const Text('Logout'),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const MainPage()),
-              );
-            }),
-      ),
+      // Container(
+      //   alignment: Alignment.centerLeft,
+      //   child: ElevatedButton(
+      //       child: const Text('Logout'),
+      //       onPressed: () {
+      //         Navigator.pushReplacement(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => const MainPage()),
+      //         );
+      //       }),
+      // ),
     ]));
   }
 }
