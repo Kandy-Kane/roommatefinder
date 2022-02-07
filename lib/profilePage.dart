@@ -21,7 +21,6 @@ class profilePage extends StatelessWidget {
   const profilePage({Key? key, required this.user}) : super(key: key);
 
   final User user;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

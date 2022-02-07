@@ -12,9 +12,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'userClass.dart';
+import 'selectedProfilePage.dart';
 
 class feedPage extends StatefulWidget {
-  const feedPage({Key? key}) : super(key: key);
+  const feedPage({Key? key, required this.user}) : super(key: key);
+
+  final User user;
 
   @override
   _feedPageState createState() => _feedPageState();
@@ -23,18 +26,19 @@ class feedPage extends StatefulWidget {
 class _feedPageState extends State<feedPage> {
   final myController = TextEditingController();
   var collection = FirebaseFirestore.instance.collection('USERS');
-  Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
-      .collection('USERS')
-      .orderBy('name')
-      .snapshots();
 
-  Stream<QuerySnapshot> snaps2 = FirebaseFirestore.instance
-      .collection('USERS')
-      .orderBy('name')
-      .snapshots();
+  // Stream<QuerySnapshot> snaps2 = FirebaseFirestore.instance
+  //     .collection('USERS')
+  //     .orderBy('name')
+  //     .snapshots();
 
   @override
   Widget build(BuildContext context) {
+    Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
+        .collection('USERS')
+        .where('name', isNotEqualTo: widget.user.name)
+        .orderBy('name')
+        .snapshots();
     var db = Database();
     return Scaffold(
 
@@ -95,8 +99,10 @@ class _feedPageState extends State<feedPage> {
                           var db = Database();
                           var selectedUser = await db.queryUser(doc['email']);
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  profilePage(user: selectedUser)));
+                              builder: (context) => selectedProfilePage(
+                                    user: widget.user,
+                                    selectedUser: selectedUser,
+                                  )));
                         },
                       ),
                     );
