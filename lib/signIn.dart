@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:developer';
+
+import 'package:flutter/material.dart';
+//import 'dart:developer';
 import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'package:roommatefinder/user_Firebase.dart';
@@ -110,16 +112,19 @@ class _MyHomePageState extends State<SignIn> {
                     await db.findUser(myController.text, myController2.text);
                 if (user == true) {
                   var userTemp = await db.queryUser(myController.text);
+                  var userID = await db.findUserForMessage(
+                      userTemp.username, userTemp.name);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TabBarDemo(
                               email: myController.text,
                               tabUser: userTemp,
+                              userID: userID,
                             )),
                   );
                 } else {
-                  print("SOMETHING WRONG HAPPENDED");
+                  log("\nSOMETHING WRONG HAPPENDED\n");
                 }
               }
               // Respond to button press

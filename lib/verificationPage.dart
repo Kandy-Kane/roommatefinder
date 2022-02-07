@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:email_auth/email_auth.dart';
+import 'package:roommatefinder/allmessages.dart';
 import 'package:roommatefinder/emailAuthClass.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'reference.dart';
@@ -9,6 +10,7 @@ import 'mongodbAttempt/database.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'user_Firebase.dart';
 import 'userClass.dart';
+import 'userTextsClass.dart';
 
 class otpVerification extends StatefulWidget {
   const otpVerification(
@@ -32,7 +34,7 @@ class otpVerification extends StatefulWidget {
 
 class _otpVerificationState extends State<otpVerification> {
   final myController = TextEditingController();
-
+  List<UserTexts> myMessages = [];
   // void verifyOTP() async {
   //   var res = emailAuth.validateOtp(
   //       recipientMail: myController.text, userOtp: myController.text);
@@ -79,9 +81,12 @@ class _otpVerificationState extends State<otpVerification> {
                   db.addUser(widget.name, widget.username, widget.email,
                       widget.password);
                   var myUser = User(
-                      name: widget.name,
-                      username: widget.username,
-                      email: widget.email);
+                    name: widget.name,
+                    username: widget.username,
+                    email: widget.email,
+                  );
+                  var userID =
+                      await db.findUserForMessage(myUser.username, myUser.name);
                   // Respond to button press
                   Navigator.pushReplacement(
                     context,
@@ -89,6 +94,7 @@ class _otpVerificationState extends State<otpVerification> {
                         builder: (context) => TabBarDemo(
                               email: widget.email,
                               tabUser: myUser,
+                              userID: userID,
                             )),
                   );
                 } else {
