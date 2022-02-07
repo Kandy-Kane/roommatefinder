@@ -47,9 +47,9 @@ class _messageDetailPageState extends State<messageDetailPage> {
 
   Color getDynamicColor(String username) {
     if (username == widget.user.username) {
-      return Colors.lightGreen;
+      return Color.fromARGB(255, 194, 255, 124);
     } else {
-      return Colors.red;
+      return Color.fromARGB(255, 68, 218, 245);
     }
   }
 
