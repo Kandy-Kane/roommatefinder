@@ -135,6 +135,7 @@ class _messageDetailPageState extends State<messageDetailPage> {
                 ),
             SizedBox(
               child: TextFormField(
+                style: TextStyle(fontSize: 20),
                 controller: myController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -145,24 +146,29 @@ class _messageDetailPageState extends State<messageDetailPage> {
                   return null;
                 },
                 decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 25.0, horizontal: 10.0),
+                  border: OutlineInputBorder(),
                   labelText: '...',
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () async {
-                messageReference.add({
-                  'messageBody': myController.text,
-                  'dateTime': DateTime.now(),
-                  'sentBy': widget.user.username
-                });
-                messageReference2.add({
-                  'messageBody': myController.text,
-                  'dateTime': DateTime.now(),
-                  'sentBy': widget.user.username
-                });
-                myController.clear();
+                if (myController.text == '') {
+                } else {
+                  messageReference.add({
+                    'messageBody': myController.text,
+                    'dateTime': DateTime.now(),
+                    'sentBy': widget.user.username
+                  });
+                  messageReference2.add({
+                    'messageBody': myController.text,
+                    'dateTime': DateTime.now(),
+                    'sentBy': widget.user.username
+                  });
+                  myController.clear();
+                }
               },
               child: Text('SEND'),
             )
