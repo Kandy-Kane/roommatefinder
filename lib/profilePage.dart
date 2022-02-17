@@ -9,6 +9,7 @@ import 'package:email_auth/email_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'userClass.dart';
+import 'package:image_picker/image_picker.dart';
 
 // void main() {
 //   runApp(const MaterialApp(
@@ -29,8 +30,10 @@ class profilePage extends StatelessWidget {
           child: FractionallySizedBox(
               widthFactor: 1,
               heightFactor: 0.6,
-              child: Container(
-                color: Colors.green,
+              child: InkResponse(
+                child: Container(
+                  color: Colors.green,
+                ),
               ))),
       Container(
         alignment: Alignment.centerLeft,

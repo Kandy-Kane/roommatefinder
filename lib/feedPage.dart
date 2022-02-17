@@ -26,6 +26,11 @@ class feedPage extends StatefulWidget {
 class _feedPageState extends State<feedPage> {
   final myController = TextEditingController();
   var collection = FirebaseFirestore.instance.collection('USERS');
+  Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
+      .collection('USERS')
+      //.where('name', isNotEqualTo: user.name)
+      .orderBy('name')
+      .snapshots();
 
   // Stream<QuerySnapshot> snaps2 = FirebaseFirestore.instance
   //     .collection('USERS')
@@ -34,11 +39,6 @@ class _feedPageState extends State<feedPage> {
 
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
-        .collection('USERS')
-        .where('name', isNotEqualTo: widget.user.name)
-        .orderBy('name')
-        .snapshots();
     var db = Database();
     return Scaffold(
 
@@ -63,10 +63,6 @@ class _feedPageState extends State<feedPage> {
                     .where('name', isGreaterThanOrEqualTo: value)
                     .where('name', isLessThan: value + 'z')
                     .snapshots();
-                // snaps2 = collection
-                //     .where('email', isGreaterThanOrEqualTo: value)
-                //     .where('email', isLessThan: value + 'z')
-                //     .snapshots();
               }
             });
           },

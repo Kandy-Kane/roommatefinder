@@ -3,6 +3,8 @@ import 'package:roommatefinder/feedPage.dart';
 import 'package:roommatefinder/messagesPage.dart';
 import 'package:roommatefinder/mongodbAttempt/mongouserClass.dart';
 import 'package:roommatefinder/profilePage.dart';
+import 'package:roommatefinder/matchPage.dart';
+import 'package:roommatefinder/quizPage.dart';
 import 'package:roommatefinder/reference.dart';
 import 'userClass.dart';
 
@@ -37,10 +39,12 @@ class TabBarDemo extends StatelessWidget {
                 Tab(
                   text: "Messages",
                 ),
-                Tab(icon: Icon(Icons.ac_unit)),
+                Tab(
+                  text: 'Matches',
+                ),
               ],
             ),
-            title: const Text('Tabs Demo'),
+            title: const Text('Roommate Finder'),
           ),
           body: TabBarView(
             children: [
@@ -52,7 +56,10 @@ class TabBarDemo extends StatelessWidget {
                 user: tabUser,
                 userID: userID,
               ),
-              Icon(Icons.ac_unit),
+              // matchPage(
+              //   user: tabUser,
+              // ),
+              quizPage(user: tabUser)
             ],
           ),
         ),
