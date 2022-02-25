@@ -131,7 +131,7 @@ class _matchPageState extends State<matchPage> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: ElevatedButton(
-                                        child: Text("Submitß"),
+                                        child: Text("Submit"),
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {

@@ -32,7 +32,7 @@ class profilePage extends StatelessWidget {
               heightFactor: 0.6,
               child: InkResponse(
                 child: Container(
-                  color: Colors.green,
+                  child: Image.asset('lib/assets/images/logo.jpg'),
                 ),
               ))),
       Container(

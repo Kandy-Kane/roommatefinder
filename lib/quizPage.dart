@@ -7,6 +7,8 @@ import 'package:roommatefinder/tabs.dart';
 import 'package:roommatefinder/userClass.dart';
 import 'package:roommatefinder/user_Firebase.dart';
 import 'reference.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class quizPage extends StatefulWidget {
   const quizPage({Key? key, required this.user}) : super(key: key);
@@ -18,6 +20,20 @@ class quizPage extends StatefulWidget {
 }
 
 class _quizPageState extends State<quizPage> {
+  var db = Database();
+
+  String dropDownValue = 'Male';
+  String dropDownValue2 = 'Morning';
+  String dropDownValue3 = 'CS';
+
+  void submitAnswers(age, gender, major) async {
+    var userID = await db.getUserIDFromUsername(widget.user.username);
+    var userPreferences = await FirebaseFirestore.instance
+        .collection('USERS')
+        .doc(userID)
+        .collection('preferences');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,122 +41,157 @@ class _quizPageState extends State<quizPage> {
         Text("Gender"),
         Container(
             child: DropdownButton<String>(
+          value: dropDownValue,
+          onChanged: (String? newValue) {
+            setState(() {
+              dropDownValue = newValue!;
+            });
+          },
           items: <String>['Male', 'Female', 'Other', 'Prefer Not To Say']
-              .map((String value) {
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
             );
           }).toList(),
-          onChanged: (_) {},
         )),
-        Text("Morning Or Night Person"),
+        Text("Age"),
         Container(
             child: DropdownButton<String>(
-          items: <String>[
-            'Morning Person',
-            'Night Person',
-            'Both!',
-            'Always Tired'
-          ].map((String value) {
+          value: dropDownValue2,
+          onChanged: (String? newValue) {
+            setState(() {
+              dropDownValue2 = newValue!;
+            });
+          },
+          items: <String>['Morning', 'Night', 'All Day', 'Forever Tired']
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
             );
           }).toList(),
-          onChanged: (_) {},
         )),
-        Text("Personality Type"),
+        Text("Major"),
         Container(
             child: DropdownButton<String>(
-          items: <String>['Introvert', 'Extrovert'].map((String value) {
+          value: dropDownValue3,
+          onChanged: (String? newValue) {
+            setState(() {
+              dropDownValue3 = newValue!;
+            });
+          },
+          items: <String>['CS', 'Business', 'Mathamatics', 'English']
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
             );
           }).toList(),
-          onChanged: (_) {},
         )),
-        Text("Study Habits"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>[
-            'Study At Home',
-            'Study at the Library',
-            'Study at Starbucks',
-            'Study Somewhere Random'
-          ].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
-        Text("Weekend Habits"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>['Go Out', 'Stay In', 'Study Like a Lame']
-              .map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
-        Text("How Clean Are You"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>[
-            'Extremely Clean',
-            'Normal Amount of Clean',
-            'On the Messier Side',
-            'Straight Slob'
-          ].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
-        Text("Preferred Room Temperature"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>['Cold', 'Hot', 'Cold At Night', 'Warm At Night']
-              .map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
-        Text("Food Choices"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>['Diet Food', 'Junk Food', 'Leftovers', 'Semi-Healthy']
-              .map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
-        Text("Music Volume"),
-        Container(
-            child: DropdownButton<String>(
-          items: <String>['Loud', 'Quiet', 'Prefer Headphones']
-              .map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (_) {},
-        )),
+        // Text("Personality Type"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Introvert', 'Extrovert', 'Unsure', 'Panda']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // Text("Major"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Computer Science', 'Business', 'Communications', 'Mathamatics']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // Text("Morning Or Night Person"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Morning', 'Night', 'All Day', 'Forever Tired']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // Text("Morning Or Night Person"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Morning', 'Night', 'All Day', 'Forever Tired']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // Text("Morning Or Night Person"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Morning', 'Night', 'All Day', 'Forever Tired']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // Text("Morning Or Night Person"),
+        // Container(
+        //     child: DropdownButton<String>(
+        //   value: dropDownValue2,
+        //   onChanged: (String? newValue) {
+        //     setState(() {
+        //       dropDownValue2 = newValue!;
+        //     });
+        //   },
+        //   items: <String>['Morning', 'Night', 'All Day', 'Forever Tired']
+        //       .map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // )),
+        // TextButton(onPressed: submitAnswers, child: const Text('Submit'))
       ],
     );
   }

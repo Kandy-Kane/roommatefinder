@@ -55,6 +55,7 @@ class _messageDetailPageState extends State<messageDetailPage> {
 
   EdgeInsets getDynamicMargin(String username) {
     if (username == widget.user.username) {
+      log(widget.user.username);
       return EdgeInsets.only(left: 250.0, top: 16, bottom: 16, right: 10);
     } else {
       return EdgeInsets.only(right: 250.0, top: 16, bottom: 16, left: 10);
