@@ -56,10 +56,9 @@ class TabBarDemo extends StatelessWidget {
                 user: tabUser,
                 userID: userID,
               ),
-              // matchPage(
-              //   user: tabUser,
-              // ),
-              quizPage(user: tabUser)
+              matchPage(
+                user: tabUser,
+              ),
             ],
           ),
         ),

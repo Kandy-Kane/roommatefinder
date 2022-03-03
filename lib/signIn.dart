@@ -26,6 +26,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<SignIn> {
+  bool _hidePassword = true;
   int _counter = 0;
   final myController = TextEditingController();
   final myController2 = TextEditingController();
@@ -90,30 +91,43 @@ class _MyHomePageState extends State<SignIn> {
           ),
 
           TextFormField(
-            controller: myController2,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Enter Password',
-            ),
-          ),
+              controller: myController2,
+              obscureText: _hidePassword,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Enter Password',
+                suffixIcon: IconButton(
+                    icon: Icon(_hidePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _hidePassword = !_hidePassword;
+                      });
+                    }),
+              )),
 
           //SEND BUTTON
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 var db = Database();
+                print("CONTROLLER 1 TEXT: " + myController.text + "\n");
+                print("CONTROLLER 2 TEXT: " + myController2.text);
                 var user =
                     await db.findUser(myController.text, myController2.text);
+                print("USER FOUND?: " + user.toString());
                 if (user == true) {
                   var userTemp = await db.queryUser(myController.text);
-                  var userID = await db.findUserForMessage(
-                      userTemp.username, userTemp.name);
+
+                  var userID = await db
+                      .getUserIDFromUsername(userTemp.username.toString());
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -124,7 +138,7 @@ class _MyHomePageState extends State<SignIn> {
                             )),
                   );
                 } else {
-                  log("\nSOMETHING WRONG HAPPENDED\n");
+                  log("\nSOMETHING WRONG HAPPENDED OR USER NOT FOUND\n");
                 }
               }
               // Respond to button press

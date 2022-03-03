@@ -13,6 +13,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'userClass.dart';
 import 'selectedProfilePage.dart';
+import 'package:image_cropper/image_cropper.dart';
+
+/*IMPORTANT THING TO NOTE. WHEN DOING A QUERY USING DOT
+ NOTATION THE DOT NOTATION HAS TO BE THE FIRST WHERE*/
 
 class matchPage extends StatefulWidget {
   const matchPage({Key? key, required this.user}) : super(key: key);
@@ -27,20 +31,36 @@ class _matchPageState extends State<matchPage> {
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
   var collection = FirebaseFirestore.instance.collection('USERS');
-
-  // Stream<QuerySnapshot> snaps2 = FirebaseFirestore.instance
-  //     .collection('USERS')
-  //     .orderBy('name')
-  //     .snapshots();
+  Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
+      .collection('USERS')
+      .orderBy('name')
+      .snapshots();
+  var db = Database();
 
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
-        .collection('USERS')
-        .where('name', isNotEqualTo: widget.user.name)
-        .orderBy('name')
-        .snapshots();
-    var db = Database();
+    Future<List<String>> findMatches() async {
+      List<String> answers = [];
+      var gender;
+      var groceries;
+      var morningornight;
+      var userID = await db.getUserIDFromUsername(widget.user.username);
+      var thisUser = await collection.doc(userID).get();
+      gender = thisUser.get('preferences.gender');
+      groceries = thisUser.get('preferences.groceries');
+      morningornight = thisUser.get('preferences.morningornight');
+
+      print(gender);
+      print(groceries);
+      print(morningornight);
+      answers.add(gender);
+      answers.add(groceries);
+      answers.add(morningornight);
+      return answers;
+    }
+
+    //var gender = findMatches();
+
     return Scaffold(
 
         // appBar: AppBar(
@@ -49,6 +69,39 @@ class _matchPageState extends State<matchPage> {
         // ),
         body: Column(
       children: [
+        Container(
+          child: TextButton(
+            child: Text("GET MATCHES"),
+            onPressed: () async {
+              var fieldPath = new FieldPath(['preferences', 'gender']);
+              var answers = await findMatches();
+              print('ANSWERS:' + answers.toString());
+              print(answers[0]);
+              // var snaps2 = await collection
+              //     //.where('name', isNotEqualTo: widget.user.name)
+              //     .where('preferences.gender', isEqualTo: 'Female')
+              //     //.orderBy('name')
+              //     .get()
+              //     .then((QuerySnapshot querySnapshot) {
+              //   querySnapshot.docs.forEach((doc) {
+              //     print(doc['email']);
+              //   });
+              // });
+
+              setState(() {
+                snaps = collection
+                    .where('preferences.gender', isEqualTo: answers[0])
+                    // .where('preferences.morningornight',
+                    //     isEqualTo: answers[2].toString())
+                    // .where('preferences.groceries',
+                    //     isEqualTo: answers[1].toString())
+                    .where('name', isNotEqualTo: widget.user.name)
+                    //.orderBy('name')
+                    .snapshots();
+              });
+            },
+          ),
+        ),
         Row(children: [
           Expanded(
               child: TextFormField(
@@ -56,8 +109,8 @@ class _matchPageState extends State<matchPage> {
             onChanged: (value) async {
               setState(() {
                 if (value == "") {
-                  snaps = FirebaseFirestore.instance
-                      .collection('USERS')
+                  snaps = collection
+                      //f.where('username', isNotEqualTo: widget.user.username)
                       .orderBy('name')
                       .snapshots();
                 } else {

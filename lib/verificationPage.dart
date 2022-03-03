@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:email_auth/email_auth.dart';
 import 'package:roommatefinder/allmessages.dart';
 import 'package:roommatefinder/emailAuthClass.dart';
+import 'package:roommatefinder/quizPage.dart';
 import 'package:roommatefinder/tabs.dart';
 import 'reference.dart';
 import 'mongodbAttempt/mongouserClass.dart';
@@ -35,33 +36,11 @@ class otpVerification extends StatefulWidget {
 class _otpVerificationState extends State<otpVerification> {
   final myController = TextEditingController();
   List<UserTexts> myMessages = [];
-  // void verifyOTP() async {
-  //   var res = emailAuth.validateOtp(
-  //       recipientMail: myController.text, userOtp: myController.text);
-  //   if (res) {
-  //     log("OTP VERFIED");
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => const TabBarDemo()),
-  //     );
-  //     myController.clear();
-  //   } else {
-  //     log("OTP INVALID");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -87,14 +66,14 @@ class _otpVerificationState extends State<otpVerification> {
                   );
                   var userID =
                       await db.findUserForMessage(myUser.username, myUser.name);
-                  // Respond to button press
+
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TabBarDemo(
+                        builder: (context) => quizPage(
                               email: widget.email,
-                              tabUser: myUser,
-                              userID: userID,
+                              user: myUser,
+                              ID: userID,
                             )),
                   );
                 } else {

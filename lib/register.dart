@@ -41,6 +41,8 @@ class Register extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Register> {
+  bool _hidePassword = true;
+  bool _hideReEnterPassword = true;
   static var myAuth;
   int _counter = 0;
   final myController = TextEditingController();
@@ -151,34 +153,51 @@ class _MyHomePageState extends State<Register> {
           ),
 
           TextFormField(
-            controller: myController4,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Create A Password',
-            ),
-          ),
-
+              controller: myController4,
+              obscureText: _hidePassword,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Create A Password',
+                suffixIcon: IconButton(
+                    icon: Icon(_hidePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _hidePassword = !_hidePassword;
+                      });
+                    }),
+              )),
           TextFormField(
-            controller: myController5,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please Re-Enter Your Password';
-              } else if (value != myController4.text) {
-                return 'Passwords Do Not Match';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Re-Enter Password',
-            ),
-          ),
+              controller: myController5,
+              obscureText: _hideReEnterPassword,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Re-Enter Your Password';
+                } else if (value != myController4.text) {
+                  return 'Passwords Do Not Match';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Re-Enter Password',
+                suffixIcon: IconButton(
+                    icon: Icon(_hideReEnterPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _hideReEnterPassword = !_hideReEnterPassword;
+                      });
+                    }),
+              )),
 
           //SEND BUTTON
           ElevatedButton(

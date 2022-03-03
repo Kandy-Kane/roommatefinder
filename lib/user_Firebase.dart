@@ -15,8 +15,7 @@ import 'singleTextClass.dart';
 import 'userTextsClass.dart';
 
 class Database {
-  final CollectionReference users =
-      FirebaseFirestore.instance.collection('USERS');
+  var users = FirebaseFirestore.instance.collection('USERS');
 
   Future<void> addUser(
       String name, String username, String email, String password) async {
@@ -95,7 +94,7 @@ class Database {
         //print(doc["email"]);
         if (doc['username'] == username) {
           log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
-          log(doc.data().toString());
+          //log(doc.data().toString());
           foundEmail = true;
           if (doc['name'] == name) {
             log("NAME MATCH");
@@ -122,12 +121,15 @@ class Database {
     bool foundEmail = false;
     bool matched = false;
     var myUser;
+
+    print("GIVEN USERNAME:" + username);
     //query the whole collection search by email
+
     var user = await users.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc['username'] == username) {
-          log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
+          log("\n\nUSER FOUND FOR GET ID FROM USERNAME!!!\n\n");
           log(doc.data().toString());
           foundEmail = true;
           uid = doc.id;

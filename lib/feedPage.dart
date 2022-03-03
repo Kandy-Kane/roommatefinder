@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'userClass.dart';
 import 'selectedProfilePage.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 class feedPage extends StatefulWidget {
   const feedPage({Key? key, required this.user}) : super(key: key);
@@ -87,10 +88,20 @@ class _feedPageState extends State<feedPage> {
                   children: (snapshot.data!).docs.map((doc) {
                     return Card(
                       child: ListTile(
-                        leading: FlutterLogo(size: 56.0),
-                        title: Text(doc['name']),
-                        subtitle: Text(doc['email']),
-                        //trailing: Icon(Icons.more_vert),
+                        leading: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.blueAccent)),
+                          child: FlutterLogo(size: 30.0),
+                        ),
+                        trailing: FavoriteButton(
+                          isFavorite: false,
+                          valueChanged: (_isFavorite) {
+                            print('Is Favourite $_isFavorite');
+                          },
+                        ),
+                        title: Text(doc['username']),
                         onTap: () async {
                           var db = Database();
                           var selectedUser = await db.queryUser(doc['email']);
