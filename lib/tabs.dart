@@ -29,6 +29,7 @@ class TabBarDemo extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
+              isScrollable: true,
               tabs: [
                 Tab(
                   text: "Profile",

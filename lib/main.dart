@@ -33,6 +33,10 @@ class MainPage extends StatelessWidget {
             title: const Text('Roommate Finder'),
             bottom: TabBar(
               tabs: [Text("Register"), Text("Sign In")],
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.greenAccent),
+              indicatorColor: Colors.greenAccent,
             ),
           ),
           body: TabBarView(
