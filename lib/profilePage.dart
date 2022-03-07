@@ -31,7 +31,7 @@ class profilePage extends StatelessWidget {
           child: FractionallySizedBox(
               widthFactor: 1,
               heightFactor: 0.6,
-              child: InkResponse(
+              child: GestureDetector(
                 child: Container(
                   child: Image.asset('lib/assets/images/logo.jpg'),
                 ),
@@ -65,23 +65,48 @@ class profilePage extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go back!'),
-        ),
-      ),
-    );
-  }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class SecondRoute extends StatelessWidget {
+//   const SecondRoute({Key? key}) : super(key: key);
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Second Route'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//           child: const Text('Go back!'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+  
