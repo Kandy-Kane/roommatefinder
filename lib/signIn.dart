@@ -32,33 +32,6 @@ class _MyHomePageState extends State<SignIn> {
   final myController2 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  // Future<void> _showMyDialog() async {
-  //   return showDialog<void>(
-  //     context: context,
-  //     barrierDismissible: false, // user must tap button!
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('EMAIL SENT'),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: const <Widget>[
-  //               Text('VERIFICATION EMAIL SENT'),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('CLOSE'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -68,85 +41,116 @@ class _MyHomePageState extends State<SignIn> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Form(
-      key: _formKey,
-      // Center is a layout widget. It takes a single child and positions it
-      // in the middle of the parent.
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextFormField(
-            controller: myController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              } //else if (!value.contains("manhattan.edu")) {
-              //   return 'Please use your Manhattan College Email';
-              // }
-              return null;
-            },
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Enter Your Email',
-            ),
+        key: _formKey,
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 200,
+                height: 200,
+                child: Image(
+                    image: AssetImage('lib/assets/images/schoolLogo.png')),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                width: 325,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 76, 84, 88)),
+                child: TextFormField(
+                  style: TextStyle(
+                      fontSize: 20.0, height: 2.0, color: Colors.black),
+                  controller: myController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    } //else if (!value.contains("manhattan.edu")) {
+                    //   return 'Please use your Manhattan College Email';
+                    // }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    filled: true,
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter Your Email',
+                  ),
+                ),
+              ),
+              Container(
+                width: 325,
+                margin: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 76, 84, 88)),
+                child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 20.0, height: 2.0, color: Colors.black),
+                    controller: myController2,
+                    obscureText: _hidePassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Enter Password',
+                      suffixIcon: IconButton(
+                          icon: Icon(_hidePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            setState(() {
+                              _hidePassword = !_hidePassword;
+                            });
+                          }),
+                    )),
+              ),
+
+              //SEND BUTTON
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 0, 59, 2),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20),
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    var db = Database();
+                    print("CONTROLLER 1 TEXT: " + myController.text + "\n");
+                    print("CONTROLLER 2 TEXT: " + myController2.text);
+                    var user = await db.findUser(
+                        myController.text, myController2.text);
+                    print("USER FOUND?: " + user.toString());
+                    if (user == true) {
+                      var userTemp = await db.queryUser(myController.text);
+
+                      var userID = await db
+                          .getUserIDFromUsername(userTemp.username.toString());
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TabBarDemo(
+                                  email: myController.text,
+                                  tabUser: userTemp,
+                                  userID: userID,
+                                )),
+                      );
+                    } else {
+                      log("\nSOMETHING WRONG HAPPENDED OR USER NOT FOUND\n");
+                    }
+                  }
+                  // Respond to button press
+                },
+                child: Text('Sign In'),
+              )
+            ],
           ),
-
-          TextFormField(
-              controller: myController2,
-              obscureText: _hidePassword,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Enter Password',
-                suffixIcon: IconButton(
-                    icon: Icon(_hidePassword
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _hidePassword = !_hidePassword;
-                      });
-                    }),
-              )),
-
-          //SEND BUTTON
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                var db = Database();
-                print("CONTROLLER 1 TEXT: " + myController.text + "\n");
-                print("CONTROLLER 2 TEXT: " + myController2.text);
-                var user =
-                    await db.findUser(myController.text, myController2.text);
-                print("USER FOUND?: " + user.toString());
-                if (user == true) {
-                  var userTemp = await db.queryUser(myController.text);
-
-                  var userID = await db
-                      .getUserIDFromUsername(userTemp.username.toString());
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TabBarDemo(
-                              email: myController.text,
-                              tabUser: userTemp,
-                              userID: userID,
-                            )),
-                  );
-                } else {
-                  log("\nSOMETHING WRONG HAPPENDED OR USER NOT FOUND\n");
-                }
-              }
-              // Respond to button press
-            },
-            child: Text('Sign In'),
-          )
-        ],
-      ),
-    );
+        ));
   }
 }

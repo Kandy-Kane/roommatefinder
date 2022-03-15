@@ -45,6 +45,7 @@ dependencies:
   favorite_button: ^0.0.4
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  video_player: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/logo.jpg
+    - lib/assets/images/manhattanBackground.jpg
+    - lib/assets/images/schoolLogo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
