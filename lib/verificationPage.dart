@@ -60,10 +60,10 @@ class _otpVerificationState extends State<otpVerification> {
                   db.addUser(widget.name, widget.username, widget.email,
                       widget.password);
                   var myUser = User(
-                    name: widget.name,
-                    username: widget.username,
-                    email: widget.email,
-                  );
+                      name: widget.name,
+                      username: widget.username,
+                      email: widget.email,
+                      bio: 'Enter something for your bio');
                   var userID =
                       await db.findUserForMessage(myUser.username, myUser.name);
 

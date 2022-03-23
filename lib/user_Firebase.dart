@@ -269,10 +269,10 @@ class Database {
           print(doc.data());
           foundEmail = true;
           myUser = User(
-            name: doc['name'],
-            username: doc['username'],
-            email: doc['email'],
-          );
+              name: doc['name'],
+              username: doc['username'],
+              email: doc['email'],
+              bio: doc['bio']);
         }
       });
     });
@@ -295,10 +295,10 @@ class Database {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         var currentUser = User(
-          name: doc['name'],
-          username: doc['username'],
-          email: doc['email'],
-        );
+            name: doc['name'],
+            username: doc['username'],
+            email: doc['email'],
+            bio: doc['bio']);
         userList.add(currentUser);
       });
     });

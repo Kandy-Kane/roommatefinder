@@ -13,11 +13,13 @@ class User {
   final String name;
   final String username;
   final String email;
+  String bio;
 
-  const User({
-    //required this.ID,
-    required this.name,
-    required this.username,
-    required this.email,
-  });
+  User(
+      {
+      //required this.ID,
+      required this.name,
+      required this.username,
+      required this.email,
+      required this.bio});
 }
