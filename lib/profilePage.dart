@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:developer';
@@ -14,6 +16,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'dart:async';
+import 'dart:io';
+import 'package:path/path.dart' as Path;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class profilePage extends StatefulWidget {
   profilePage({Key? key, required this.user}) : super(key: key);
@@ -23,19 +30,37 @@ class profilePage extends StatefulWidget {
 }
 
 class _profilePageState extends State<profilePage> {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+
+  String errorMsg = '';
+
   var collection = FirebaseFirestore.instance.collection('USERS');
   bool _isEditingText = false;
   final TextEditingController _editingController = TextEditingController();
   late String initialText;
   var db = Database();
+  var profilePic;
 
   @override
   void initState() {
     super.initState();
     _editingController.text = widget.user.bio;
     initialText = widget.user.bio;
+    // var profilePic = downloadURLExample();
+    getProfilePicInfo();
   }
 
+  Future<void> getProfilePicInfo() async {
+    Uint8List? imageBytes = await storage
+        .ref()
+        .child(widget.user.email + ": Profile Pic")
+        .getData(10000000);
+    // log(imageBytes.toString());
+    setState(() {
+      profilePic = imageBytes;
+    });
+  }
   // @override
   // void dispose() {
   //   _editingController.dispose();
@@ -53,7 +78,7 @@ class _profilePageState extends State<profilePage> {
               child: Center(
             child: TextField(
               minLines: 1,
-              maxLines: 10,
+              maxLines: 5,
               // onSubmitted: (newValue) {
               //   setState(() {
               //     initialText = newValue;
@@ -85,20 +110,51 @@ class _profilePageState extends State<profilePage> {
     );
   }
 
+  final picker = ImagePicker();
+  File _imageFile = File('');
+
+  Future pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+    uploadImageToFirebase(context);
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = Path.basename(_imageFile.path);
+    firebase_storage.Reference firebaseStorageRef = firebase_storage
+        .FirebaseStorage.instance
+        .ref()
+        .child(widget.user.email + ": Profile Pic");
+    firebase_storage.UploadTask uploadTask =
+        firebaseStorageRef.putFile(_imageFile);
+    firebase_storage.TaskSnapshot taskSnapshot =
+        await uploadTask.whenComplete(() => null);
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => log("Done: $value"),
+        );
+    getProfilePicInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var img = profilePic != null
+        ? Image.memory(
+            profilePic,
+            fit: BoxFit.fitHeight,
+          )
+        : Text(errorMsg != null ? errorMsg : "Loading...");
     var changedBio = initialText;
     return Scaffold(
         body: Column(children: [
       Flexible(
+          //========================Picture Holder=====================//
           child: FractionallySizedBox(
               widthFactor: 1,
-              heightFactor: 0.6,
-              child: GestureDetector(
-                child: Container(
-                  child: Image.asset('lib/assets/images/logo.jpg'),
-                ),
-              ))),
+              heightFactor: 1,
+              child: InkWell(onTap: pickImage, child: Container(child: img)))),
       Container(
         alignment: Alignment.centerLeft,
         child: Text(widget.user.username,
@@ -128,25 +184,29 @@ class _profilePageState extends State<profilePage> {
               fontSize: 18.0,
             ),
           )),
-      Container(
-        alignment: Alignment.centerLeft,
-        child: ElevatedButton(
-            child: const Text('Edit Bio'),
-            onPressed: () {
-              editBio();
-            }),
-      ),
-      Container(
-        // alignment: Alignment.centerLeft,
-        child: ElevatedButton(
-            child: const Text('Logout'),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const MainPage()),
-              );
-            }),
-      ),
+      Row(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: ElevatedButton(
+                child: const Text('Edit Bio'),
+                onPressed: () {
+                  editBio();
+                }),
+          ),
+          Container(
+            // alignment: Alignment.centerLeft,
+            child: ElevatedButton(
+                child: const Text('Logout'),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainPage()),
+                  );
+                }),
+          ),
+        ],
+      )
     ]));
   }
 }
