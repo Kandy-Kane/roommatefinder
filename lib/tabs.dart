@@ -28,20 +28,42 @@ class TabBarDemo extends StatelessWidget {
         length: 4,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Color.fromARGB(255, 4, 43, 5),
             bottom: const TabBar(
               isScrollable: true,
               tabs: [
                 Tab(
-                  text: "Profile",
+                  // text: "Profile",
+                  icon: Icon(
+                    Icons.portrait,
+                    color: Colors.amber,
+                    size: 50.0,
+                  ),
                 ),
                 Tab(
-                  text: "Feed",
+                  icon: Icon(
+                    Icons.list,
+                    color: Colors.amber,
+                    size: 50.0,
+                  ),
+                  // text: "Feed",
                 ),
                 Tab(
-                  text: "Messages",
+                  iconMargin: EdgeInsets.all(90),
+                  // text: "Messages",
+                  icon: Icon(
+                    Icons.message,
+                    color: Colors.amber,
+                    size: 50.0,
+                  ),
                 ),
                 Tab(
-                  text: 'Matches',
+                  icon: Icon(
+                    Icons.handshake,
+                    color: Colors.amber,
+                    size: 50.0,
+                  ),
+                  // text: 'Matches',
                 ),
               ],
             ),

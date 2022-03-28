@@ -49,6 +49,7 @@ dependencies:
   google_mobile_ads: ^1.1.0
   firebase_storage: ^10.2.9
   cached_network_image: ^3.2.0
+  flutter_local_notifications: ^9.4.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - lib/assets/images/logo.jpg
     - lib/assets/images/manhattanBackground.jpg
     - lib/assets/images/schoolLogo.png
+    - lib/assets/videos/mcvideo.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

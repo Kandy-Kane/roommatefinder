@@ -79,6 +79,11 @@ class Database {
     return matched;
   }
 
+  // Future<bool> checkForMessage() {
+  //   bool messageFound = false;
+
+  // }
+
   Future<String> findUserForMessage(String username, String name) async {
     var uid;
     String userNameTemp;
@@ -176,6 +181,31 @@ class Database {
       });
     });
     return userName;
+  }
+
+  Future<void> deleteMessage(username, docID) async {
+    var userID = await getUserIDFromUsername(username);
+    return users
+        .doc(userID)
+        .collection('allMessages')
+        .doc(docID)
+        .delete()
+        .then((value) => log('Message Deleted'))
+        .catchError((error) => log('ERROR DELETING MESSAGE' + error));
+  }
+
+  Future<bool> checkForDuplicateEmail(emailAttempt) async {
+    bool found = false;
+    var user = await users.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        //print(doc["email"]);
+        if (doc['email'] == emailAttempt) {
+          log("\n\nDUPLICATE EMAIL FOUND!!!\n\n");
+          found = true;
+        } else {}
+      });
+    });
+    return found;
   }
 
   Future<List<String>> addMessage(String user1, String user2) async {

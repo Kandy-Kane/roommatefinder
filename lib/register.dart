@@ -10,29 +10,6 @@ import 'mongodbAttempt/database.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'user_Firebase.dart';
 
-// class Register extends StatelessWidget {
-//   const Register({Key? key}) : super(key: key);
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//           // This is the theme of your application.
-//           //
-//           // Try running your application with "flutter run". You'll see the
-//           // application has a blue toolbar. Then, without quitting the app, try
-//           // changing the primarySwatch below to Colors.green and then invoke
-//           // "hot reload" (press "r" in the console where you ran "flutter run",
-//           // or simply save your changes to "hot reload" in a Flutter IDE).
-//           // Notice that the counter didn't reset back to zero; the application
-//           // is not restarted.
-//           primarySwatch: Colors.red),
-//       home: const Register(),
-//     );
-//   }
-// }
-
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -45,6 +22,7 @@ class _MyHomePageState extends State<Register> {
   bool _hideReEnterPassword = true;
   static var myAuth;
   int _counter = 0;
+  var db = Database();
   final myController = TextEditingController();
   final myController2 = TextEditingController();
   final myController3 = TextEditingController();
@@ -172,6 +150,9 @@ class _MyHomePageState extends State<Register> {
                     } else if (!value.contains("manhattan.edu")) {
                       return 'Please use your Manhattan College Email';
                     }
+                    // else if (db.checkForDuplicateEmail(value) == true) {
+                    //   return 'Your email is already registered';
+                    // }
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -251,17 +232,23 @@ class _MyHomePageState extends State<Register> {
                     textStyle: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // Respond to button press
-                    //sendOTP();
-                    myAuth = emailAuthClass(myController3.text);
-                    int result = await myAuth.sendOTP();
-                    log(result.toString());
-                    if (result == 1) {
+                  var emailAlreadyRegistered =
+                      await db.checkForDuplicateEmail(myController3.text);
+                  if (emailAlreadyRegistered == true) {
+                    _duplicateEmailFound();
+                  } else {
+                    if (_formKey.currentState!.validate()) {
+                      // Respond to button press
+                      //sendOTP();
+                      myAuth = emailAuthClass(myController3.text);
+                      int result = await myAuth.sendOTP();
+                      log(result.toString());
+                      if (result == 1) {
+                        log(myController3.text);
+                        _showMyDialog();
+                      } else {}
                       log(myController3.text);
-                      _showMyDialog();
-                    } else {}
-                    log(myController3.text);
+                    }
                   }
                 },
                 child: Text('Send Verification Code'),
@@ -322,6 +309,33 @@ class _MyHomePageState extends State<Register> {
                           email: myController3.text,
                           password: myController4.text)),
                 );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _duplicateEmailFound() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Email Already Registered'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Your email is already registered. Try signing In.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('CLOSE'),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
           ],

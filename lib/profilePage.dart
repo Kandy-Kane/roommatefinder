@@ -148,84 +148,70 @@ class _profilePageState extends State<profilePage> {
         : Text(errorMsg != null ? errorMsg : "Loading...");
     var changedBio = initialText;
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 4, 43, 5),
         body: Column(children: [
-      Flexible(
-          //========================Picture Holder=====================//
-          child: FractionallySizedBox(
-              widthFactor: 1,
-              heightFactor: 1,
-              child: InkWell(onTap: pickImage, child: Container(child: img)))),
-      Container(
-        alignment: Alignment.centerLeft,
-        child: Text(widget.user.username,
-            textAlign: TextAlign.left, textScaleFactor: 4.0),
-      ),
-      Container(
-        alignment: Alignment.centerLeft,
-        child: Text(widget.user.name,
-            textAlign: TextAlign.left, textScaleFactor: 2.0),
-      ),
-      Container(
-        alignment: Alignment.centerLeft,
-        child: Text(widget.user.email,
-            textAlign: TextAlign.left, textScaleFactor: 2.0),
-      ),
-      Container(
-          alignment: Alignment.centerLeft,
-          // onTap: () {
-          //   setState(() {
-          //     _isEditingText = true;
-          //   });
-          // },
-          child: Text(
-            initialText,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.0,
-            ),
-          )),
-      Row(
-        children: [
+          Flexible(
+              //========================Picture Holder=====================//
+              child: FractionallySizedBox(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Container(
+                      color: Colors.black,
+                      child: InkWell(
+                          onTap: pickImage, child: Container(child: img))))),
           Container(
             alignment: Alignment.centerLeft,
-            child: ElevatedButton(
-                child: const Text('Edit Bio'),
-                onPressed: () {
-                  editBio();
-                }),
+            child: Text(widget.user.username,
+                textAlign: TextAlign.left, textScaleFactor: 4.0),
           ),
           Container(
-            // alignment: Alignment.centerLeft,
-            child: ElevatedButton(
-                child: const Text('Logout'),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MainPage()),
-                  );
-                }),
+            alignment: Alignment.centerLeft,
+            child: Text(widget.user.name,
+                textAlign: TextAlign.left, textScaleFactor: 2.0),
           ),
-        ],
-      )
-    ]));
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(widget.user.email,
+                textAlign: TextAlign.left, textScaleFactor: 2.0),
+          ),
+          Container(
+              alignment: Alignment.centerLeft,
+              // onTap: () {
+              //   setState(() {
+              //     _isEditingText = true;
+              //   });
+              // },
+              child: Text(
+                initialText,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                ),
+              )),
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                    child: const Text('Edit Bio'),
+                    onPressed: () {
+                      editBio();
+                    }),
+              ),
+              Container(
+                // alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                    child: const Text('Logout'),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainPage()),
+                      );
+                    }),
+              ),
+            ],
+          )
+        ]));
   }
 }
-//   Widget bioTextField() {
-//     return Column(children: [
-//       Center(
-//         child: TextField(
-//           minLines: 1,
-//           maxLines: 10,
-//           onSubmitted: (newValue) {
-//             setState(() {
-//               initialText = newValue;
-//               _isEditingText = false;
-//             });
-//           },
-//           autofocus: true,
-//           controller: _editingController,
-//         ),
-//       )
-//     ]);
-//   }
-// }

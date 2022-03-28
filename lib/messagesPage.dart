@@ -111,14 +111,21 @@ class _messagesPageState extends State<messagesPage> {
                 return ListView(
                   children: (snapshot.data!).docs.map((doc) {
                     return Container(
+                      margin: EdgeInsets.only(top: 10),
                       child: ListTile(
                         leading: Container(
                             decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.blueAccent)),
-                            child: FlutterLogo(size: 30.0)),
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.black45)),
+                            child: Image.asset(
+                                'lib/assets/images/schoolLogo.png')),
                         title: Text(doc['username']),
+
+                        onLongPress: () async {
+                          // await db.deleteMessage(widget.user.username, doc.id);
+                          _showPopupMenu(doc.id);
+                        },
                         //trailing: Icon(Icons.more_vert),
                         onTap: () async {
                           //var db = Database();
@@ -149,5 +156,33 @@ class _messagesPageState extends State<messagesPage> {
             ),
       ],
     ));
+  }
+
+  void _showPopupMenu(docID) async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(100, 100, 100, 100),
+      color: Colors.amber,
+      items: [
+        PopupMenuItem<String>(
+            child: Container(
+              child: Icon(Icons.delete_forever),
+            ),
+            value: 'deleteMessage',
+            onTap: () async {
+              await db.deleteMessage(widget.user.username, docID);
+            }),
+        PopupMenuItem<String>(
+          child: Container(
+            child: Icon(Icons.arrow_back),
+          ),
+          value: 'cancel',
+          onTap: () {
+            null;
+          },
+        ),
+      ],
+      elevation: 8.0,
+    );
   }
 }
