@@ -98,12 +98,12 @@ class Database {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc['username'] == username) {
-          log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
+          // log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
           //log(doc.data().toString());
           foundEmail = true;
           if (doc['name'] == name) {
-            log("NAME MATCH");
-            log("USERID: " + doc.id);
+            // log("NAME MATCH");
+            // log("USERID: " + doc.id);
             matched = true;
             userNameTemp = doc['username'];
             nameTemp = doc['name'];
@@ -127,15 +127,15 @@ class Database {
     bool matched = false;
     var myUser;
 
-    print("GIVEN USERNAME:" + username);
+    // print("GIVEN USERNAME:" + username);
     //query the whole collection search by email
 
     var user = await users.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc['username'] == username) {
-          log("\n\nUSER FOUND FOR GET ID FROM USERNAME!!!\n\n");
-          log(doc.data().toString());
+          // log("\n\nUSER FOUND FOR GET ID FROM USERNAME!!!\n\n");
+          // log(doc.data().toString());
           foundEmail = true;
           uid = doc.id;
         }
@@ -157,8 +157,8 @@ class Database {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc['username'] == username) {
-          log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
-          log(doc.data().toString());
+          // log("\n\nUSER FOUND FOR MESSAGE!!!\n\n");
+          // log(doc.data().toString());
           foundEmail = true;
           messageRef = doc.id;
         }
@@ -173,8 +173,8 @@ class Database {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc.id == uid) {
-          log("\n\nUSER FOUND GETTING USERID!!!\n\n");
-          log(doc.data().toString());
+          // log("\n\nUSER FOUND GETTING USERID!!!\n\n");
+          // log(doc.data().toString());
           userName = doc['username'];
           //myUser = User(name: nameTemp, username: userNameTemp, email: email);
         } else {}
@@ -200,12 +200,27 @@ class Database {
       querySnapshot.docs.forEach((doc) {
         //print(doc["email"]);
         if (doc['email'] == emailAttempt) {
-          log("\n\nDUPLICATE EMAIL FOUND!!!\n\n");
+          // log("\n\nDUPLICATE EMAIL FOUND!!!\n\n");
           found = true;
         } else {}
       });
     });
     return found;
+  }
+
+  Future<String> getUserEmailFromName(name) async {
+    var email = '';
+    var user = await users.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        //print(doc["email"]);
+        if (doc['name'] == name) {
+          // log("\n\nUSER NAME FOUND FROM EMAIL!!!\n\n");
+          // log(doc['name']);
+          email = doc['email'];
+        }
+      });
+    });
+    return email;
   }
 
   Future<List<String>> addMessage(String user1, String user2) async {
@@ -222,7 +237,7 @@ class Database {
     messageArray.add(user1ID);
 
     var user2ID = await getUsersUsername(user2again.id);
-    log('USERNAME: ' + user2ID);
+    // log('USERNAME: ' + user2ID);
 
     bool messageFound = false;
     var docReference;
@@ -235,22 +250,22 @@ class Database {
         if (doc['messengerID'] == user2again.id) {
           if (doc['username'] == user2ID) {
             messageFound = true;
-            log("MESSAGE FOUND");
+            // log("MESSAGE FOUND");
             docReference = doc.id;
             messageArray.add(doc.id);
-            log("\n\nDOC REFERENCE:");
-            log(docReference.toString());
+            // log("\n\nDOC REFERENCE:");
+            // log(docReference.toString());
           }
         } else {
           messageFound = false;
-          log("MESSAGE FOUND FALSE");
+          // log("MESSAGE FOUND FALSE");
         }
       });
     });
     //log(messageFound.toString());
 
     if (messageFound == true) {
-      log('ATTEMPTING TO ADD TEXT TO FOUND MESSAGE');
+      // log('ATTEMPTING TO ADD TEXT TO FOUND MESSAGE');
       var textref = await user1again
           .collection('allMessages')
           .doc(docReference)
@@ -259,10 +274,10 @@ class Database {
       // .add({'messageBody': hellotext, 'dateTime': DateTime.now()}).then(
       //     (value) => log("TEXT REFERNCE: " + value.id));
     } else if (messageFound == false) {
-      log('ATTEMPTING TO CREATE NEW MESSAGE AND TEXT');
-      log("USER 2: " + user2);
-      log(user1);
-      log(user2ID);
+      // log('ATTEMPTING TO CREATE NEW MESSAGE AND TEXT');
+      // log("USER 2: " + user2);
+      // log(user1);
+      // log(user2ID);
       var messageRef = await user1again
           .collection('allMessages')
           .add({'messengerID': user2, 'userID': user1, 'username': user2ID})
@@ -281,7 +296,7 @@ class Database {
       // .add({'messageBody': hellotext, 'dateTime': DateTime.now()}).then(
       //     (value) => log("TEXT REFERNCE: " + value.id));
     } else {
-      log("SOMETHING WENT WRONG");
+      // log("SOMETHING WENT WRONG");
     }
 
     return messageArray;

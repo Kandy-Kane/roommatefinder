@@ -234,11 +234,25 @@ class _matchPageState extends State<matchPage> {
                   );
                 }
                 ;
-                return Container(
+                return InkWell(
+                  // height: 50,
+                  child: Container(
                     height: 50,
-                    child: Center(
-                      child: Text(allMatches[index].name.toString()),
-                    ));
+                    child: Text(allMatches[index].name.toString()),
+                  ),
+                  onTap: () async {
+                    log('ATTEMPT: ' + allMatches[index].name.toString());
+                    var userEmail = await db.getUserEmailFromName(
+                        allMatches[index].name.toString());
+                    log("USEREMAIL: " + userEmail.toString());
+                    var selectedUser = await db.queryUser(userEmail.toString());
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => selectedProfilePage(
+                              user: widget.user,
+                              selectedUser: selectedUser,
+                            )));
+                  },
+                );
               }),
           // child: StreamBuilder<QuerySnapshot>(
           //   stream: snaps,

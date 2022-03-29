@@ -103,7 +103,6 @@ class _feedPageState extends State<feedPage> {
                         ),
                         title: Text(doc['username']),
                         onTap: () async {
-                          var db = Database();
                           var selectedUser = await db.queryUser(doc['email']);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => selectedProfilePage(
