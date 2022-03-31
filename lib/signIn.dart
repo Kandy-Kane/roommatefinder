@@ -18,7 +18,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<SignIn> {
-  late BannerAd _bannerAd;
+  // late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -26,36 +26,36 @@ class _MyHomePageState extends State<SignIn> {
   @override
   void initState() {
     // TODO: Initialize _bannerAd
-    _bannerAd = BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          print('Failed to load a banner ad: ${err.message}');
-          _isBannerAdReady = false;
-          ad.dispose();
-        },
-      ),
-    );
+    // _bannerAd = BannerAd(
+    //   adUnitId: AdHelper.bannerAdUnitId,
+    //   request: AdRequest(),
+    //   size: AdSize.banner,
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (_) {
+    //       setState(() {
+    //         _isBannerAdReady = true;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (ad, err) {
+    //       print('Failed to load a banner ad: ${err.message}');
+    //       _isBannerAdReady = false;
+    //       ad.dispose();
+    //     },
+    //   ),
+    // );
 
-    _bannerAd.load();
-    _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
+    // _bannerAd.load();
+    // _controller = VideoPlayerController.network(
+    //   'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+    // );
 
-    _initializeVideoPlayerFuture = _controller.initialize();
+    // _initializeVideoPlayerFuture = _controller.initialize();
   }
 
   @override
   void dispose() {
     // TODO: Dispose a BannerAd object
-    _bannerAd.dispose();
+    // _bannerAd.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -69,17 +69,17 @@ class _MyHomePageState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      if (_isBannerAdReady == true)
-        Container(
-          margin: EdgeInsets.only(bottom: 60, top: 0),
+      // if (_isBannerAdReady == true)
+      //   Container(
+      //     margin: EdgeInsets.only(bottom: 5, top: 0),
 
-          // decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(10),
-          //     color: Color.fromARGB(255, 76, 84, 88)),
-          width: _bannerAd.size.width.toDouble(),
-          height: _bannerAd.size.height.toDouble(),
-          child: AdWidget(ad: _bannerAd),
-        ),
+      //     // decoration: BoxDecoration(
+      //     //     borderRadius: BorderRadius.circular(10),
+      //     //     color: Color.fromARGB(255, 76, 84, 88)),
+      //     width: _bannerAd.size.width.toDouble(),
+      //     height: _bannerAd.size.height.toDouble(),
+      //     child: AdWidget(ad: _bannerAd),
+      //   ),
       // Container(
       //   child: FutureBuilder(
       //     future: _initializeVideoPlayerFuture,
@@ -126,6 +126,7 @@ class _MyHomePageState extends State<SignIn> {
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
           child: Container(
+            margin: const EdgeInsets.only(bottom: 100.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -193,7 +194,9 @@ class _MyHomePageState extends State<SignIn> {
                 ),
 
                 //SEND BUTTON
-                ElevatedButton(
+                Container(
+                    // margin: EdgeInsets.only(bottom: 500.0),
+                    child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Color.fromARGB(255, 0, 59, 2),
                       padding: const EdgeInsets.symmetric(
@@ -229,7 +232,7 @@ class _MyHomePageState extends State<SignIn> {
                     // Respond to button press
                   },
                   child: Text('Sign In'),
-                )
+                ))
               ],
             ),
           ))

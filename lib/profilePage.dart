@@ -156,38 +156,113 @@ class _profilePageState extends State<profilePage> {
                   widthFactor: 1,
                   heightFactor: 1,
                   child: Container(
-                      color: Colors.black,
                       child: InkWell(
                           onTap: pickImage, child: Container(child: img))))),
           Container(
-            alignment: Alignment.centerLeft,
-            child: Text(widget.user.username,
-                textAlign: TextAlign.left, textScaleFactor: 4.0),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    width: 5.0, color: Color.fromARGB(255, 255, 213, 0)),
+              ),
+            ),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(6, 10, 6, 2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.user.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 238, 194, 49),
+                      fontSize: 27.0,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(6, 0, 6, 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.user.username,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontStyle: FontStyle.italic,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(widget.user.name,
-                textAlign: TextAlign.left, textScaleFactor: 2.0),
+            // onTap: () {
+            //   setState(() {
+            //     _isEditingText = true;
+            //   });
+            // },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "About me:",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 62, 192, 243),
+                      fontStyle: FontStyle.normal,
+                      fontSize: 21.0,
+                    ),
+                  ),
+                  Text(
+                    initialText,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(widget.user.email,
-                textAlign: TextAlign.left, textScaleFactor: 2.0),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 1, 10, 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.user.email,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 238, 194, 49),
+                      fontSize: 16.0,
+                      fontStyle: FontStyle.italic,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          Container(
-              alignment: Alignment.centerLeft,
-              // onTap: () {
-              //   setState(() {
-              //     _isEditingText = true;
-              //   });
-              // },
-              child: Text(
-                initialText,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                ),
-              )),
           Row(
             children: [
               Container(

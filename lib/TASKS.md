@@ -1,0 +1,8 @@
+-Notifications
+-loading screens
+-matches presentation 
+-messages design
+-Sign in, move divs when typing
+-Prompt for incorrect password
+-and then solution for incorrect password
+-Have matches not include your name
