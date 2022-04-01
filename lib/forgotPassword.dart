@@ -22,6 +22,8 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  String cancelOrGoBack = 'Cancel';
+  bool buttonenabled = true;
   // late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   late VideoPlayerController _controller;
@@ -94,101 +96,129 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     // var forgotPasswordController = TextEditingController();
     return Scaffold(
         body: Center(
-            child: Column(children: [
-      Form(
-          key: _formKey,
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 100.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: 325,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color.fromARGB(255, 76, 84, 88)),
-                  child: TextFormField(
-                    style: TextStyle(
-                        fontSize: 20.0, height: 2.0, color: Colors.black),
-                    controller: myController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      } else if (!value.contains("manhattan.edu")) {
-                        return 'Please use your Manhattan College Email';
-                      }
-                      // else if (db.checkForDuplicateEmail(value) == true) {
-                      //   return 'Your email is already registered';
-                      // }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      filled: true,
-                      border: UnderlineInputBorder(),
-                      labelText: 'Enter Your Email',
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+          Form(
+              key: _formKey,
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 100.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: 325,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 76, 84, 88)),
+                      child: TextFormField(
+                        style: TextStyle(
+                            fontSize: 20.0, height: 2.0, color: Colors.black),
+                        controller: myController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          } else if (!value.contains("manhattan.edu")) {
+                            return 'Please use your Manhattan College Email';
+                          }
+                          // else if (db.checkForDuplicateEmail(value) == true) {
+                          //   return 'Your email is already registered';
+                          // }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          filled: true,
+                          border: UnderlineInputBorder(),
+                          labelText: 'Enter Your Email',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: const Text('Continue'),
-                  onPressed: () async {
-                    var userEmail = myController.text;
-                    log(userEmail);
-                    var forgotPasswordReturns =
-                        await db.forgotPasswordReturn(userEmail);
-                    log(forgotPasswordReturns.toString());
-                    var userName = forgotPasswordReturns[0].toString();
-                    var userPassword = forgotPasswordReturns[1].toString();
+                    TextButton(
+                      child: Text(cancelOrGoBack),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Continue'),
+                      onPressed: buttonenabled
+                          ? () async {
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                              var userEmail = myController.text;
+                              log(userEmail);
+                              var forgotPasswordReturns =
+                                  await db.forgotPasswordReturn(userEmail);
+                              log(forgotPasswordReturns.toString());
+                              if (forgotPasswordReturns.isNotEmpty) {
+                                var userName =
+                                    forgotPasswordReturns[0].toString();
+                                var userPassword =
+                                    forgotPasswordReturns[1].toString();
+                                log('INFORMATION:' +
+                                    userEmail +
+                                    ":" +
+                                    userName +
+                                    ":" +
+                                    userPassword);
+                                var message =
+                                    'Your password is: ${userPassword}';
+                                log(message);
+                                try {
+                                  var attempt = await sendEmail(
+                                      userName, userEmail, message);
+                                  if (attempt == 200) {
+                                    setState(() {
+                                      buttonenabled = false;
+                                      cancelOrGoBack = 'Go Back';
+                                    });
+                                  }
+                                  log(attempt.toString());
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    attempt == 200
+                                        ? const SnackBar(
+                                            content: Text('Message Sent!'),
+                                            backgroundColor: Colors.green)
+                                        : const SnackBar(
+                                            content:
+                                                Text('Failed to send message!'),
+                                            backgroundColor: Colors.red),
+                                  );
+                                } catch (e) {
+                                  log(e.toString());
+                                }
+                              } else {
+                                log('Couldnt find email');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Couldnt find email!'),
+                                      backgroundColor: Colors.red),
+                                );
+                              }
 
-                    log('INFORMATION:' +
-                        userEmail +
-                        ":" +
-                        userName +
-                        ":" +
-                        userPassword);
-                    var message = 'Your password is: ${userPassword}';
-                    log(message);
-                    try {
-                      var attempt =
-                          await sendEmail(userName, userEmail, message);
-                      log(attempt.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        attempt == 200
-                            ? const SnackBar(
-                                content: Text('Message Sent!'),
-                                backgroundColor: Colors.green)
-                            : const SnackBar(
-                                content: Text('Failed to send message!'),
-                                backgroundColor: Colors.red),
-                      );
-                    } catch (e) {
-                      log(e.toString());
-                    }
+                              // try {
+                              //   var attempt = await sendEmail(userName, userEmail, message);
+                              //   // log('attempt:' + attempt.toString());
+                              //   log('success');
+                              // } catch (e) {
+                              //   log(e.toString());
+                              // }
+                            }
+                          : null,
+                    ),
 
-                    // try {
-                    //   var attempt = await sendEmail(userName, userEmail, message);
-                    //   // log('attempt:' + attempt.toString());
-                    //   log('success');
-                    // } catch (e) {
-                    //   log(e.toString());
-                    // }
-                  },
+                    //SEND BUTTON
+                  ],
                 ),
-
-                //SEND BUTTON
-              ],
-            ),
-          ))
-    ])));
+              ))
+        ])));
   }
 
   Future<void> ForgotPassword() async {

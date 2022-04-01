@@ -23,7 +23,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<SignIn> {
-  // late BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -273,10 +273,20 @@ class _MyHomePageState extends State<SignIn> {
                     // Respond to button press
                   },
                   child: Text('Sign In'),
-                ))
+                )),
               ],
             ),
-          ))
+          )),
+      // if (_isBannerAdReady == true)
+      //   Container(
+      //     alignment: Alignment.bottomCenter,
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(10),
+      //         color: Color.fromARGB(255, 76, 84, 88)),
+      //     width: _bannerAd.size.width.toDouble(),
+      //     height: _bannerAd.size.height.toDouble(),
+      //     child: AdWidget(ad: _bannerAd),
+      //   ),
     ]);
   }
 

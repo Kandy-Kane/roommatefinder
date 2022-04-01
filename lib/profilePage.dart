@@ -33,7 +33,7 @@ class _profilePageState extends State<profilePage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
-  String errorMsg = '';
+  String errorMsg = 'Image Not Found';
 
   var collection = FirebaseFirestore.instance.collection('USERS');
   bool _isEditingText = false;
@@ -54,7 +54,7 @@ class _profilePageState extends State<profilePage> {
   Future<void> getProfilePicInfo() async {
     Uint8List? imageBytes = await storage
         .ref()
-        .child(widget.user.email + ": Profile Pic")
+        .child(widget.user.email + ":Profile Pic")
         .getData(10000000);
     // log(imageBytes.toString());
     setState(() {
@@ -127,7 +127,7 @@ class _profilePageState extends State<profilePage> {
     firebase_storage.Reference firebaseStorageRef = firebase_storage
         .FirebaseStorage.instance
         .ref()
-        .child(widget.user.email + ": Profile Pic");
+        .child(widget.user.email + ":Profile Pic");
     firebase_storage.UploadTask uploadTask =
         firebaseStorageRef.putFile(_imageFile);
     firebase_storage.TaskSnapshot taskSnapshot =
