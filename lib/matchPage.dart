@@ -32,6 +32,7 @@ class _matchPageState extends State<matchPage> {
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
   var collection = FirebaseFirestore.instance.collection('USERS');
+
   Stream<QuerySnapshot> snaps = FirebaseFirestore.instance
       .collection('USERS')
       .orderBy('name')
@@ -97,6 +98,9 @@ class _matchPageState extends State<matchPage> {
       var allUserPoints = <int>[];
       allMatches.clear();
       List<matchUser> allCurrentMatches = [];
+      var collection = FirebaseFirestore.instance
+          .collection('USERS')
+          .where('name', isNotEqualTo: widget.user.name);
 
       collection.get().then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((doc) {

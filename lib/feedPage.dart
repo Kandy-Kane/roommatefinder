@@ -40,6 +40,11 @@ class _feedPageState extends State<feedPage> {
 
   @override
   Widget build(BuildContext context) {
+    snaps = FirebaseFirestore.instance
+        .collection('USERS')
+        .where('name', isNotEqualTo: widget.user.name)
+        .orderBy('name')
+        .snapshots();
     var db = Database();
     return Scaffold(
 

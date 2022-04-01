@@ -58,6 +58,29 @@ class Database {
         .catchError((error) => log("Failed to add user: $error"));
   }
 
+  Future<List> forgotPasswordReturn(userEmail) async {
+    var returnElements = [];
+    var emailFound = false;
+    var userPassword = '';
+    var userName = '';
+
+    var user = await users.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        //print(doc["email"]);
+        if (doc['email'] == userEmail) {
+          print("email found for forgotpasswordReturn!!!");
+          // print(doc.data());
+          emailFound = true;
+          userName = doc['name'];
+          userPassword = doc['password'];
+          returnElements.add(userName);
+          returnElements.add(userPassword);
+        } else {}
+      });
+    });
+    return returnElements;
+  }
+
   Future<bool> findUser(String email, String password) async {
     bool foundEmail = false;
     bool matched = false;

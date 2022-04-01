@@ -3,6 +3,8 @@
 -matches presentation 
 -messages design
 -Sign in, move divs when typing
--Prompt for incorrect password
 -and then solution for incorrect password
--Have matches not include your name
+-get ads working for web and IOS
+-Give user access to delete account
+-fix Registration first message
+

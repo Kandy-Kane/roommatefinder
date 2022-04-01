@@ -101,6 +101,12 @@ class _selectedProfilePageState extends State<selectedProfilePage> {
                     child: img,
                   ))),
           Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    width: 5.0, color: Color.fromARGB(255, 255, 213, 0)),
+              ),
+            ),
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(6, 10, 6, 2),

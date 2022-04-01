@@ -11,18 +11,17 @@ import 'ad_helper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show json;
-import 'package:roommatefinder/forgotPassword.dart';
 // init("ANNdWnd1Kk-RNpuBx");
 // import  'emailjs-com';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _MyHomePageState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _MyHomePageState extends State<SignIn> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   // late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   late VideoPlayerController _controller;
@@ -92,59 +91,10 @@ class _MyHomePageState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      // if (_isBannerAdReady == true)
-      //   Container(
-      //     margin: EdgeInsets.only(bottom: 5, top: 0),
-
-      //     // decoration: BoxDecoration(
-      //     //     borderRadius: BorderRadius.circular(10),
-      //     //     color: Color.fromARGB(255, 76, 84, 88)),
-      //     width: _bannerAd.size.width.toDouble(),
-      //     height: _bannerAd.size.height.toDouble(),
-      //     child: AdWidget(ad: _bannerAd),
-      //   ),
-      // Container(
-      //   child: FutureBuilder(
-      //     future: _initializeVideoPlayerFuture,
-      //     builder: (context, snapshot) {
-      //       if (snapshot.connectionState == ConnectionState.done) {
-      //         // If the VideoPlayerController has finished initialization, use
-      //         // the data it provides to limit the aspect ratio of the video.
-      //         return AspectRatio(
-      //           aspectRatio: _controller.value.aspectRatio,
-      //           // Use the VideoPlayer widget to display the video.
-      //           child: VideoPlayer(_controller),
-      //         );
-      //       } else {
-      //         // If the VideoPlayerController is still initializing, show a
-      //         // loading spinner.
-      //         return const Center(
-      //           child: CircularProgressIndicator(),
-      //         );
-      //       }
-      //     },
-      //   ),
-      // ),
-      // FloatingActionButton(
-      //   onPressed: () {
-      //     // Wrap the play or pause in a call to `setState`. This ensures the
-      //     // correct icon is shown.
-      //     setState(() {
-      //       // If the video is playing, pause it.
-      //       if (_controller.value.isPlaying) {
-      //         _controller.pause();
-      //       } else {
-      //         // If the video is paused, play it.
-      //         _controller.play();
-      //       }
-      //     });
-      //   },
-      //   // Display the correct icon depending on the state of the player.
-      //   child: Icon(
-      //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-      //   ),
-      // ),
+    // var forgotPasswordController = TextEditingController();
+    return Scaffold(
+        body: Center(
+            child: Column(children: [
       Form(
           key: _formKey,
           // Center is a layout widget. It takes a single child and positions it
@@ -154,12 +104,6 @@ class _MyHomePageState extends State<SignIn> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  child: Image(
-                      image: AssetImage('lib/assets/images/schoolLogo.png')),
-                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   width: 325,
@@ -188,99 +132,66 @@ class _MyHomePageState extends State<SignIn> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 325,
-                  // margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color.fromARGB(255, 76, 84, 88)),
-                  child: TextFormField(
-                      style: TextStyle(
-                          fontSize: 20.0, height: 2.0, color: Colors.black),
-                      controller: myController2,
-                      obscureText: _hidePassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Enter Password',
-                        suffixIcon: IconButton(
-                            icon: Icon(_hidePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _hidePassword = !_hidePassword;
-                              });
-                            }),
-                      )),
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
+                TextButton(
+                  child: const Text('Continue'),
+                  onPressed: () async {
+                    var userEmail = myController.text;
+                    log(userEmail);
+                    var forgotPasswordReturns =
+                        await db.forgotPasswordReturn(userEmail);
+                    log(forgotPasswordReturns.toString());
+                    var userName = forgotPasswordReturns[0].toString();
+                    var userPassword = forgotPasswordReturns[1].toString();
 
-                Container(
-                  child: TextButton(
-                    child: Text('Forgot Password'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgotPassword(),
-                          ));
-                    },
-                  ),
+                    log('INFORMATION:' +
+                        userEmail +
+                        ":" +
+                        userName +
+                        ":" +
+                        userPassword);
+                    var message = 'Your password is: ${userPassword}';
+                    log(message);
+                    try {
+                      var attempt =
+                          await sendEmail(userName, userEmail, message);
+                      log(attempt.toString());
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        attempt == 200
+                            ? const SnackBar(
+                                content: Text('Message Sent!'),
+                                backgroundColor: Colors.green)
+                            : const SnackBar(
+                                content: Text('Failed to send message!'),
+                                backgroundColor: Colors.red),
+                      );
+                    } catch (e) {
+                      log(e.toString());
+                    }
+
+                    // try {
+                    //   var attempt = await sendEmail(userName, userEmail, message);
+                    //   // log('attempt:' + attempt.toString());
+                    //   log('success');
+                    // } catch (e) {
+                    //   log(e.toString());
+                    // }
+                  },
                 ),
 
                 //SEND BUTTON
-                Container(
-                    // margin: EdgeInsets.only(bottom: 500.0),
-                    child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(255, 0, 59, 2),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 20),
-                      textStyle: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      var db = Database();
-                      print("CONTROLLER 1 TEXT: " + myController.text + "\n");
-                      print("CONTROLLER 2 TEXT: " + myController2.text);
-                      var user = await db.findUser(
-                          myController.text, myController2.text);
-                      print("USER FOUND?: " + user.toString());
-                      if (user == true) {
-                        var userTemp = await db.queryUser(myController.text);
-
-                        var userID = await db.getUserIDFromUsername(
-                            userTemp.username.toString());
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TabBarDemo(
-                                    email: myController.text,
-                                    tabUser: userTemp,
-                                    userID: userID,
-                                  )),
-                        );
-                      } else {
-                        log("\nSOMETHING WRONG HAPPENDED OR USER NOT FOUND\n");
-                        _passwordDoesNotMatch();
-                      }
-                    }
-                    // Respond to button press
-                  },
-                  child: Text('Sign In'),
-                ))
               ],
             ),
           ))
-    ]);
+    ])));
   }
 
-  Future<void> forgotPassword() async {
+  Future<void> ForgotPassword() async {
     var forgotPasswordController = TextEditingController();
 
     return showDialog<void>(
