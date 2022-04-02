@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:developer';
@@ -9,7 +8,6 @@ import 'package:roommatefinder/main.dart';
 import 'package:roommatefinder/user_Firebase.dart';
 import 'functions.dart';
 import 'package:email_auth/email_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'userClass.dart';
 import 'package:image_picker/image_picker.dart';

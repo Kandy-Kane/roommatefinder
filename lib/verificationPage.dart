@@ -36,6 +36,7 @@ class otpVerification extends StatefulWidget {
 class _otpVerificationState extends State<otpVerification> {
   final myController = TextEditingController();
   List<UserTexts> myMessages = [];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +45,14 @@ class _otpVerificationState extends State<otpVerification> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextFormField(
-              controller: myController,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'ENTER OTP',
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                controller: myController,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'ENTER OTP',
+                ),
               ),
             ),
             ElevatedButton(
@@ -78,6 +82,7 @@ class _otpVerificationState extends State<otpVerification> {
                   );
                 } else {
                   log("PROBLEM VERIFYING OTP IN VERIFICATiON PAGE");
+                  incorrectVerificationNUmber();
                 }
               },
               child: Text('Verify OTP'),
@@ -85,6 +90,29 @@ class _otpVerificationState extends State<otpVerification> {
           ],
         ),
       ),
+    );
+  }
+
+  void incorrectVerificationNUmber() {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Verification Number Incorrect'),
+          content: SingleChildScrollView(
+              child:
+                  Center(child: Text('Your verification number is incorrect'))),
+          actions: [
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

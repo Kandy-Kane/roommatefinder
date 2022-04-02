@@ -6,6 +6,7 @@ import 'package:roommatefinder/profilePage.dart';
 import 'package:roommatefinder/matchPage.dart';
 import 'package:roommatefinder/quizPage.dart';
 import 'package:roommatefinder/reference.dart';
+import 'package:roommatefinder/settingsPage.dart';
 import 'userClass.dart';
 
 class TabBarDemo extends StatelessWidget {
@@ -67,7 +68,27 @@ class TabBarDemo extends StatelessWidget {
                 ),
               ],
             ),
-            title: const Text('Roommate Finder'),
+            title: Container(
+                child: Row(
+              children: [
+                const Text('Roommate Finder'),
+                Spacer(),
+                InkWell(
+                  child: Icon(
+                    Icons.settings,
+                    color: Color.fromARGB(255, 232, 190, 0),
+                    size: 30.0,
+                    semanticLabel: 'Text to announce in accessibility modes',
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => settingsPage(
+                              user: tabUser,
+                            )));
+                  },
+                )
+              ],
+            )),
           ),
           body: TabBarView(
             children: [

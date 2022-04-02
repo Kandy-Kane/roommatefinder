@@ -27,7 +27,8 @@ class Database {
           'name': name, // John Doe
           'username': username, // Stokes and Sons
           'email': email,
-          'password': password, // 42
+          'password': password,
+          'bio': 'ENTER YOUR BIO HERE' // 42
         })
         .then((value) async {
           userDocID = value.id;
