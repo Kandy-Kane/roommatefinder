@@ -30,31 +30,32 @@ class Database {
           'password': password,
           'bio': 'ENTER YOUR BIO HERE' // 42
         })
-        .then((value) async {
-          userDocID = value.id;
-          var messageRef = await users
-              .doc(userDocID)
-              .collection('allMessages')
-              .add({
-                'messengerID': 'ROOMMATE FINDER',
-                'userID': userDocID,
-                'username': 'ROOMMATE FINDER'
-              })
-              .then((value) => messageid = value.id)
-              .then((value) => log('MESSAGE REFERENCE: ' + messageid))
-              .then((value) {
-                var textref = users
-                    .doc(userDocID)
-                    .collection('allMessages')
-                    .doc(messageid)
-                    .collection('allTexts')
-                    .add({
-                  'messageBody': 'WELCOME',
-                  'dateTime': DateTime.now()
-                }).then((value) => log("TEXT REFERNCE: " + value.id));
-              })
-              .catchError((error) => log("Failed to send Message: $error"));
-        })
+        //=================THIS IS FOR SENDING INITIAL MESSAGE================//
+        // .then((value) async {
+        //   userDocID = value.id;
+        //   var messageRef = await users
+        //       .doc(userDocID)
+        //       .collection('allMessages')
+        //       .add({
+        //         'messengerID': 'ROOMMATE FINDER',
+        //         'userID': userDocID,
+        //         'username': 'ROOMMATE FINDER'
+        //       })
+        //       .then((value) => messageid = value.id)
+        //       .then((value) => log('MESSAGE REFERENCE: ' + messageid))
+        //       .then((value) {
+        //         var textref = users
+        //             .doc(userDocID)
+        //             .collection('allMessages')
+        //             .doc(messageid)
+        //             .collection('allTexts')
+        //             .add({
+        //           'messageBody': 'WELCOME',
+        //           'dateTime': DateTime.now()
+        //         }).then((value) => log("TEXT REFERNCE: " + value.id));
+        //       })
+        //       .catchError((error) => log("Failed to send Message: $error"));
+        // })
         .then((value) => log("User Added"))
         .catchError((error) => log("Failed to add user: $error"));
   }
@@ -67,15 +68,15 @@ class Database {
 
     var user = await users.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        //print(doc["email"]);
         if (doc['email'] == userEmail) {
-          print("email found for forgotpasswordReturn!!!");
+          print("email found for forgotpasswordReturn: " + doc['email']);
           // print(doc.data());
           emailFound = true;
           userName = doc['name'];
           userPassword = doc['password'];
           returnElements.add(userName);
           returnElements.add(userPassword);
+          print('RETURN ELEMENTS: ' + returnElements.toString());
         } else {}
       });
     });

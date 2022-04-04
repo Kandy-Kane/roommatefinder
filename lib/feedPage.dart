@@ -40,11 +40,11 @@ class _feedPageState extends State<feedPage> {
 
   @override
   Widget build(BuildContext context) {
-    snaps = FirebaseFirestore.instance
-        .collection('USERS')
-        .where('name', isNotEqualTo: widget.user.name)
-        .orderBy('name')
-        .snapshots();
+    // snaps = FirebaseFirestore.instance
+    //     .collection('USERS')
+    //     .where('name', isNotEqualTo: widget.user.name)
+    //     .orderBy('name')
+    //     .snapshots();
     var db = Database();
     return Scaffold(
 
@@ -66,7 +66,7 @@ class _feedPageState extends State<feedPage> {
                     .snapshots();
               } else {
                 snaps = collection
-                    .where('name', isGreaterThanOrEqualTo: value)
+                    .where('name', isEqualTo: value.trim())
                     .where('name', isLessThan: value + 'z')
                     .snapshots();
               }
@@ -74,7 +74,7 @@ class _feedPageState extends State<feedPage> {
           },
           decoration: const InputDecoration(
             border: UnderlineInputBorder(),
-            labelText: 'Search Using Name',
+            labelText: 'Search Using Full Name. Camal Case',
           ),
         )),
         Flexible(
