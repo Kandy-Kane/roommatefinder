@@ -178,6 +178,7 @@ class _matchPageState extends State<matchPage> {
     }
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 4, 43, 5),
 
         // appBar: AppBar(
         //   title: Text("Notes"),
@@ -186,8 +187,11 @@ class _matchPageState extends State<matchPage> {
         body: Column(
       children: [
         Container(
-          child: TextButton(
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+          child: ElevatedButton(
             child: Text("GET MATCHES"),
+            style: ElevatedButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 24),),
             onPressed: () async {
               // var answers = await getUsersPreferences();
               // var allUserPoints = await createMatches();
@@ -241,9 +245,16 @@ class _matchPageState extends State<matchPage> {
                 return InkWell(
                   // height: 50,
                   child: Container(
+                    alignment: Alignment.center,
                     height: 50,
-                    child: Text(allMatches[index].name.toString()),
+                    child: Text(allMatches[index].name.toString(),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 238, 194, 49),
+                      fontSize: 20.0,
+                      letterSpacing: 2.0,
+                    ),),
                   ),
+                  
                   onTap: () async {
                     log('ATTEMPT: ' + allMatches[index].name.toString());
                     var userEmail = await db.getUserEmailFromName(

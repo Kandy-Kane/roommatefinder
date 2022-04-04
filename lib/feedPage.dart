@@ -98,7 +98,8 @@ class _feedPageState extends State<feedPage> {
                               color: Colors.black,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(color: Colors.blueAccent)),
-                          child: FlutterLogo(size: 30.0),
+                          child: Image.asset(
+                                'lib/assets/images/schoolLogo.png')
                         ),
                         trailing: FavoriteButton(
                           isFavorite: false,
