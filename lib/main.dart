@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:roommatefinder/reference.dart';
 import 'package:roommatefinder/register.dart';
@@ -20,15 +22,10 @@ void main() async {
   runApp(const MaterialApp(
     title: 'Navigation Basics',
     home: MainPage(),
+    home: Splash(),
   ));
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
 
 class _MainPageState extends State<MainPage> {
   Future<InitializationStatus> _initGoogleMobileAds() {
