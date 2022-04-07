@@ -141,14 +141,18 @@ class _messageDetailPageState extends State<messageDetailPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
-                  } //else if (!value.contains("manhattan.edu")) {
-                  //   return 'Please use your Manhattan College Email';
-                  // }
+                  } 
                   return null;
                 },
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: '...',
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(width: 3, color: Colors.blue),
+                  ),
+                  labelText: 'Enter your message',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3, color: Colors.green),
+                  borderRadius: BorderRadius.circular(15),
+                )
                 ),
               ),
             ),
