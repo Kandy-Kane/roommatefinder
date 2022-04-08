@@ -11,6 +11,8 @@ import 'ad_helper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show json;
+import 'package:mailer/mailer.dart';
+// import 'package:mailer/smtp_server.dart';
 // init("ANNdWnd1Kk-RNpuBx");
 // import  'emailjs-com';
 
@@ -72,10 +74,39 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           'service_id': serviceId,
           'template_id': templateId,
           'user_id': userId,
-          'template_params': {'to_name': name, 'message': message}
+          'template_params': {
+            'from_name': "Roommate Finder",
+            'to_name': name,
+            'message': message,
+            'to_email': email,
+          }
         }));
+
     return response.statusCode;
   }
+
+  // Future sendEmail(String name, String userEmail, String userMessage) async {
+  //   final email = 'RoommateFinderEmailService@gmail.com';
+  //   // String password = '1qaz2wsx!QAZ@WSX';
+  //   // final smtpServer = gmail(username, password);
+
+  //   final message = Message()
+  //     ..from = Address(email)
+  //     ..recipients = [userEmail]
+  //     ..subject = 'Roommate Password Recovery'
+  //     ..text = userMessage;
+
+  //   try {
+  //     await send(message);
+  //     print('Message sent: ');
+  //     return '200';
+  //   } on MailerException catch (e) {
+  //     print('Message not sent.');
+  //     for (var p in e.problems) {
+  //       log(p.toString());
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
