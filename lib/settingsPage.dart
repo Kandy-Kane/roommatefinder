@@ -7,6 +7,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:roommatefinder/main.dart';
 import 'package:roommatefinder/profilePage.dart';
+import 'package:roommatefinder/quizPage.dart';
 import 'package:roommatefinder/register.dart';
 import 'package:roommatefinder/user_Firebase.dart';
 import 'functions.dart';
@@ -16,6 +17,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'userClass.dart';
 import 'selectedProfilePage.dart';
+import 'package:roommatefinder/updatePassword.dart';
 
 class settingsPage extends StatefulWidget {
   settingsPage({Key? key, required this.user}) : super(key: key);
@@ -124,6 +126,7 @@ class _settingsPageState extends State<settingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 0, 79, 3),
           title: Text(
             'Account Settings',
             style: TextStyle(fontSize: 25),
@@ -140,7 +143,49 @@ class _settingsPageState extends State<settingsPage> {
             child: Text(
               'Delete Account',
             ),
-          )
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Color.fromARGB(255, 0, 204, 255))),
+            onPressed: () async {
+              var userID = await db.getUserIDFromUsername(widget.user.username);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return quizPage(
+                        user: widget.user,
+                        email: widget.user.email,
+                        ID: userID);
+                  },
+                ),
+              );
+            },
+            child: Text(
+              'Update Quiz Answers',
+            ),
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Color.fromARGB(255, 0, 200, 255))),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return updatePassword(
+                      user: widget.user,
+                    );
+                  },
+                ),
+              );
+            },
+            child: Text(
+              'Change Password',
+            ),
+          ),
         ],
       ),
     );

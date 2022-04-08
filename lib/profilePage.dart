@@ -108,15 +108,61 @@ class _profilePageState extends State<profilePage> {
     );
   }
 
+  void imageChoice() {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick Image'),
+          content: SingleChildScrollView(
+              child: Center(
+            child: Column(
+              children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      await pickImage('camera');
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Camera')),
+                ElevatedButton(
+                    onPressed: () async {
+                      await pickImage('gallery');
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Gallery'))
+              ],
+            ),
+          )),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final picker = ImagePicker();
   File _imageFile = File('');
 
-  Future pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future pickImage(choice) async {
+    if (choice == 'gallery') {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      setState(() {
+        _imageFile = File(pickedFile!.path);
+      });
+    } else {
+      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      setState(() {
+        _imageFile = File(pickedFile!.path);
+      });
+    }
 
-    setState(() {
-      _imageFile = File(pickedFile!.path);
-    });
     uploadImageToFirebase(context);
   }
 
@@ -155,7 +201,7 @@ class _profilePageState extends State<profilePage> {
                   heightFactor: 1,
                   child: Container(
                       child: InkWell(
-                          onTap: pickImage, child: Container(child: img))))),
+                          onTap: imageChoice, child: Container(child: img))))),
           Container(
             decoration: BoxDecoration(
               border: Border(
