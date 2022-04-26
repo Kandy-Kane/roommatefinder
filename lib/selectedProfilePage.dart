@@ -73,7 +73,7 @@ class _selectedProfilePageState extends State<selectedProfilePage> {
   Future<void> getProfilePicInfo() async {
     Uint8List? imageBytes = await storage
         .ref()
-        .child(widget.selectedUser.email + ": Profile Pic")
+        .child(widget.selectedUser.email + ":Profile Pic")
         .getData(10000000);
     // log(imageBytes.toString());
     setState(() {

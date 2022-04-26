@@ -89,6 +89,12 @@ class _messageDetailPageState extends State<messageDetailPage> {
         .doc(widget.message2ID)
         .collection('allTexts');
 
+    var updateNewMessageIndicator = FirebaseFirestore.instance
+        .collection('USERS')
+        .doc(widget.user2ID)
+        .collection('allMessages')
+        .doc(widget.message2ID);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.userUsername),
@@ -141,29 +147,32 @@ class _messageDetailPageState extends State<messageDetailPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
-                  } 
+                  }
                   return null;
                 },
                 decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 3, color: Colors.blue),
-                  ),
-                  labelText: 'Enter your message',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.green),
-                  borderRadius: BorderRadius.circular(15),
-                )
-                ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 3, color: Colors.blue),
+                    ),
+                    labelText: 'Enter your message',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(width: 3, color: Colors.green),
+                      borderRadius: BorderRadius.circular(15),
+                    )),
               ),
             ),
             ElevatedButton(
               onPressed: () async {
-                messageReference.add({
+                await updateNewMessageIndicator
+                    .update({'newMessageIndicator': 'New Message +1'});
+                await messageReference.add({
                   'messageBody': myController.text,
                   'dateTime': DateTime.now(),
                   'sentBy': widget.user.username
                 });
-                messageReference2.add({
+                await messageReference2.add({
                   'messageBody': myController.text,
                   'dateTime': DateTime.now(),
                   'sentBy': widget.user.username

@@ -305,7 +305,12 @@ class Database {
       // log(user2ID);
       var messageRef = await user1again
           .collection('allMessages')
-          .add({'messengerID': user2, 'userID': user1, 'username': user2ID})
+          .add({
+            'messengerID': user2,
+            'userID': user1,
+            'username': user2ID,
+            'newMessageIndicator': ""
+          })
           .then((value) {
             message1id = value.id;
             messageArray.add(message1id);

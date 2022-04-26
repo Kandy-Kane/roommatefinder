@@ -42,6 +42,11 @@ class _messagesPageState extends State<messagesPage> {
         .collection('allMessages')
         .snapshots();
 
+    var messageCollection = FirebaseFirestore.instance
+        .collection('USERS')
+        .doc(widget.userID)
+        .collection('allMessages');
+
     //allMyMessages.add(userMessage);
 
     return Scaffold(
@@ -120,14 +125,34 @@ class _messagesPageState extends State<messagesPage> {
                                 border: Border.all(color: Colors.black45)),
                             child: Image.asset(
                                 'lib/assets/images/schoolLogo.png')),
-                        title: Text(doc['username']),
+                        title: Row(
+                          children: [
+                            Text(doc['username']),
+                            Spacer(),
+                            Text(
+                              doc['newMessageIndicator'],
+                              style: TextStyle(color: Colors.red),
+                            )
+                          ],
+                        ),
 
+                        // subtitle: Container(
+                        //   // decoration: BoxDecoration(color: Colors.amber),
+                        //   child: Text(
+                        //     doc['newMessageIndicator'],
+                        //     style: TextStyle(
+                        //         color: Color.fromARGB(255, 255, 22, 5)),
+                        //   ),
+                        // ),
                         onLongPress: () async {
                           // await db.deleteMessage(widget.user.username, doc.id);
                           _showPopupMenu(doc.id);
                         },
                         //trailing: Icon(Icons.more_vert),
                         onTap: () async {
+                          var updateMessageIndicator = await messageCollection
+                              .doc(doc.id)
+                              .update({'newMessageIndicator': ""});
                           //var db = Database();
                           var user2ID =
                               await db.getUserIDFromUsername(doc['username']);
