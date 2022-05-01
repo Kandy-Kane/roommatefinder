@@ -105,6 +105,10 @@ class _MyHomePageState extends State<Register> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
+                    } else if (value.length < 4) {
+                      return 'Name must be between 4 and 30 characters';
+                    } else if (value.length > 40) {
+                      return 'Name must be between 4 and 30 characters';
                     }
                     return null;
                   },
@@ -125,6 +129,10 @@ class _MyHomePageState extends State<Register> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
+                    } else if (value.length < 4) {
+                      return 'Username must be between 4 and 15 characters';
+                    } else if (value.length > 15) {
+                      return 'Username must be between 4 and 15 characters';
                     }
                     return null;
                   },
@@ -147,7 +155,7 @@ class _MyHomePageState extends State<Register> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
-                    } else if (!value.contains("manhattan.edu")) {
+                    } else if (!value.contains("@manhattan.edu")) {
                       return 'Please use your Manhattan College Email';
                     }
                     // else if (db.checkForDuplicateEmail(value) == true) {
@@ -174,6 +182,10 @@ class _MyHomePageState extends State<Register> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
+                      } else if (value.length < 4) {
+                        return 'Password must be between 4 and 25 characters';
+                      } else if (value.length > 25) {
+                        return 'Password must be between 4 and 25 characters';
                       }
                       return null;
                     },

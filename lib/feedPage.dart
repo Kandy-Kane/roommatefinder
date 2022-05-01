@@ -94,13 +94,12 @@ class _feedPageState extends State<feedPage> {
                     return Card(
                       child: ListTile(
                         leading: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.blueAccent)),
-                          child: Image.asset(
-                                'lib/assets/images/schoolLogo.png')
-                        ),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.blueAccent)),
+                            child: Image.asset(
+                                'lib/assets/images/schoolLogo.png')),
                         trailing: FavoriteButton(
                           isFavorite: false,
                           valueChanged: (_isFavorite) {
